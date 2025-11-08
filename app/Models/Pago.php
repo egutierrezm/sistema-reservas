@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Pago extends Model
+{
+    protected $fillable = [
+        'monto',
+        'metodo',
+        'fechaPago',
+        'reserva_id',
+    ];
+
+    public function reserva():BelongsTo
+    {
+        return $this->belongsTo(Reserva::class);
+    }
+
+}
