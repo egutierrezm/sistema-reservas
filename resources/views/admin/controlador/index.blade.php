@@ -4,12 +4,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">LISTADO DE DEPORTISTAS</h1>
+                <h1 class="m-0">LISTADO DE CONTROLADORES</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/admin') }}">Inicio</a></li>
-                    <li class="breadcrumb-item active">Deportistas</li>
+                    <li class="breadcrumb-item active">Controladores</li>
                 </ol>
             </div>
         </div>
@@ -22,14 +22,14 @@
         <div class="col-md-8">
 
             <div class="alert alert-info">
-                Los deportistas se crean desde la sección 
+                Los controladores se crean desde la sección 
                 <strong>Usuarios</strong> asignándoles el rol 
-                <em>DEPORTISTA</em>.
+                <em>CONTROLADOR</em>.
             </div>
 
             <div class="card card-outline card-navy">
                 <div class="card-header" style="background-color: #CCF3EA;">
-                    <h3 class="card-title"><b>Deportistas Registrados</b></h3>
+                    <h3 class="card-title"><b>Controladores Registrados</b></h3>
                 </div>
 
                 <div class="card-body">
@@ -41,32 +41,26 @@
                                     <th>Nombres</th>
                                     <th>Apellidos</th>
                                     <th>Celular</th>
-                                    <th>Club</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($deportistas as $deportista)
+                                @forelse ($controladores as $controlador)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td>{{ $deportista->user->nombres }}</td>
-                                        <td>{{ $deportista->user->apellidos }}</td>
-                                        <td>{{ $deportista->user->celular }}</td>
-                                        <td>{{ $deportista->club ?? 'No asignado' }}</td>
+                                        <td>{{ $controlador->user->nombres }}</td>
+                                        <td>{{ $controlador->user->apellidos }}</td>
+                                        <td>{{ $controlador->user->celular }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.deportista.show', $deportista->id) }}"
+                                            <a href="{{ route('admin.controlador.show', $controlador->id) }}"
                                                class="btn-icon-circle btn-view mr-1" title="Ver detalles">
                                                 <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('admin.deportista.edit', $deportista->id) }}"
-                                               class="btn-icon-circle btn-edit mr-1" title="Editar club">
-                                                <i class="fas fa-edit"></i>
                                             </a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No hay deportistas registrados.</td>
+                                        <td colspan="6" class="text-center">No hay controladores registrados.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -126,10 +120,10 @@
                 "ordering": false,
                 "language": {
                     "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ deportistas",
-                    "infoEmpty": "Mostrando 0 a 0 de 0 deportistas",
-                    "infoFiltered": "(filtrado de _MAX_ deportistas en total)",
-                    "lengthMenu": "Mostrar _MENU_ deportistas",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ controladores",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 controladores",
+                    "infoFiltered": "(filtrado de _MAX_ controladores en total)",
+                    "lengthMenu": "Mostrar _MENU_ controladores",
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
                     "search": "Buscar:",

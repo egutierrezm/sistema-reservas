@@ -30,8 +30,15 @@ class Cancha extends Model
         return $this->belongsToMany(DisciplinaDeportiva::class);
     }
 
-    public function reservas(): HasMany {
+    public function reservas():HasMany {
         return $this->hasMany(Reserva::class);
+    }
+
+    public function controladores():BelongsToMany
+    {
+        return $this->belongsToMany(Controlador::class)
+                    ->withPivot('fechaAsignacion', 'turnoAsignado')
+                    ->withTimestamps();
     }
 
 }

@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">LISTADO DE CODIGOS QR DE LAS RESERVAS</h1>
+                <h1 class="m-0">CONTROL DE LAS RESERVAS</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -35,6 +35,7 @@
                                         <th style="width: 10px">Nro</th>
                                         <th>Reservado por</th>
                                         <th>Cancha reservada</th>
+                                        <th>Participantes</th>
                                         <th>Estado</th>
                                         <th>QR</th>
                                         <th>Acciones</th>
@@ -46,12 +47,22 @@
                                             <td>{{ $codigo->reserva->deportista->user->nombres }} {{ $codigo->reserva->deportista->user->apellidos }}</td>
                                             <td>{{ $codigo->reserva->cancha->nombre }}</td>
                                             <td class="text-center">
+                                                <strong>{{ $codigo->reserva->participantes->count() }}</strong> participantes<br>
+                                                <div class="mt-2 p-2 border rounded bg-light text-truncate" style="display: inline-block; min-width: 150px; border-color: orange !important; font-size: 0.875rem;">
+                                                    @foreach($codigo->reserva->participantes as $participante)
+                                                        <div>{{ $participante->user->nombres }} {{ $participante->user->apellidos }}</div>
+                                                    @endforeach
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
                                                 @if($codigo->estado == 'activo')
-                                                    <span class="badge badge-success">{{ $codigo->estado }}</span>
+                                                    <span class="badge badge-success">Activo</span>
                                                 @elseif($codigo->estado == 'usado')
-                                                    <span class="badge badge-danger">{{ $codigo->estado }}</span>
+                                                    <span class="badge badge-danger">Usado</span>
+                                                @elseif($codigo->estado == 'expirado')
+                                                    <span class="badge badge-warning">Expirado</span>
                                                 @else
-                                                    <span class="badge badge-secondary">{{ $codigo->estado ?? 'Desconocido' }}</span>
+                                                    <span class="badge badge-secondary">Desconocido</span>
                                                 @endif
                                             </td>
                                             <td>

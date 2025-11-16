@@ -51,30 +51,6 @@
                                     <small style="color:red">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <!-- Participantes adicionales -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="participantes">Participantes en la reserva</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-users"></i></span>
-                                            </div>
-                                            <select name="participantes[]" class="form-control" id="participantes" multiple>
-                                                @foreach($deportistas as $deportista)
-                                                    <option value="{{ $deportista->id }}" 
-                                                        {{ (collect(old('participantes'))->contains($deportista->id)) ? 'selected' : '' }}>
-                                                        {{ $deportista->user->nombres }} {{ $deportista->user->apellidos }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('participantes')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror 
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="row">
                                 <div class="col-md-6">

@@ -5,8 +5,11 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdministradorEspacioController;
 // use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AjusteController;
+use App\Http\Controllers\CancelacionController;
+use App\Http\Controllers\CanchaControladorController;
 use App\Http\Controllers\CanchaController;
 use App\Http\Controllers\CodigoQrController;
+use App\Http\Controllers\ControladorController;
 use App\Http\Controllers\DeportistaController;
 use App\Http\Controllers\DisciplinaDeportivaController;
 use App\Http\Controllers\RoleController;
@@ -38,6 +41,8 @@ Route::post('/admin/role/store', [RoleController::class, 'store'])->name('admin.
 Route::get('/admin/role/edit/{id}',[RoleController::class, 'edit'])->name('admin.role.edit')->middleware('auth');
 Route::put('/admin/role/update/{id}',[RoleController::class, 'update'])->name('admin.role.update')->middleware('auth');
 Route::delete('/admin/role/destroy/{id}',[RoleController::class, 'destroy'])->name('admin.role.destroy')->middleware('auth');
+Route::get('/admin/role/permiso/{id}',[RoleController::class, 'permiso'])->name('admin.role.permiso')->middleware('auth');
+Route::post('/admin/role/updatePermiso/{id}', [RoleController::class, 'updatePermiso'])->name('admin.role.updatePermiso')->middleware('auth');
 
 // Rutas para usuarios
 Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user.index')->middleware('auth');
@@ -97,6 +102,7 @@ Route::get('/admin/reserva/edit/{id}',[ReservaController::class, 'edit'])->name(
 Route::put('/admin/reserva/update/{id}',[ReservaController::class, 'update'])->name('admin.reserva.update')->middleware('auth');
 Route::delete('/admin/reserva/destroy/{id}',[ReservaController::class, 'destroy'])->name('admin.reserva.destroy')->middleware('auth');
 Route::get('/admin/reserva/disponibilidad', [ReservaController::class, 'disponibilidad'])->name('admin.reserva.disponibilidad');
+Route::post('/admin/reserva/cancelarReserva/{id}', [ReservaController::class, 'cancelarReserva'])->name('admin.reserva.cancelarReserva')->middleware('auth');
 
 // Rutas para pagos
 Route::get('/admin/pago', [PagoController::class, 'index'])->name('admin.pago.index')->middleware('auth');
@@ -110,4 +116,22 @@ Route::get('/admin/codigoQr', [CodigoQrController::class, 'index'])->name('admin
 Route::get('/admin/codigoQr/show/{id}', [CodigoQrController::class, 'show'])->name('admin.codigoQr.show')->middleware('auth');
 Route::get('/admin/codigoQr/edit/{id}',[CodigoQrController::class, 'edit'])->name('admin.codigoQr.edit')->middleware('auth');
 Route::put('/admin/codigoQr/update/{id}',[CodigoQrController::class, 'update'])->name('admin.codigoQr.update')->middleware('auth');
+
+// Rutas para cancelar reservas
+Route::get('/admin/cancelacion', [CancelacionController::class, 'index'])->name('admin.cancelacion.index')->middleware('auth');
+Route::get('/admin/cancelacion/show/{id}', [CancelacionController::class, 'show'])->name('admin.cancelacion.show')->middleware('auth');
+
+// Rutas para el controlador
+Route::get('/admin/controlador', [ControladorController::class, 'index'])->name('admin.controlador.index')->middleware('auth');
+Route::get('/admin/controlador/show/{id}', [ControladorController::class, 'show'])->name('admin.controlador.show')->middleware('auth');
+
+// Rutas para el controlador mas la cancha
+route::get('/admin/asignacion', [CanchaControladorController::class, 'index'])->name('admin.asignacion.index')->middleware('auth');
+Route::get('/admin/asignacion/create', [CanchaControladorController::class, 'create'])->name('admin.asignacion.create')->middleware('auth');
+Route::post('/admin/asignacion/store', [CanchaControladorController::class, 'store'])->name('admin.asignacion.store')->middleware('auth');
+Route::get('/admin/asignacion/show/{id}', [CanchaControladorController::class, 'show'])->name('admin.asignacion.show')->middleware('auth');
+Route::get('/admin/asignacion/edit/{id}',[CanchaControladorController::class, 'edit'])->name('admin.asignacion.edit')->middleware('auth');
+Route::put('/admin/asignacion/update/{id}',[CanchaControladorController::class, 'update'])->name('admin.asignacion.update')->middleware('auth');
+Route::delete('/admin/asignacion/destroy/{id}',[CanchaControladorController::class, 'destroy'])->name('admin.asignacion.destroy')->middleware('auth');
+Route::get('/admin/asignacion/canchasPorEspacio/{id}', [CanchaControladorController::class, 'getCanchasPorEspacio'])->name('admin.asignacion.canchasPorEspacio')->middleware('auth');
 

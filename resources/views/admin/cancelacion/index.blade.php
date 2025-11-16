@@ -4,87 +4,84 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">LISTADO DE ROLES</h1>
+                <h1 class="m-0">LISTADO DE RESERVAS CANCELADAS</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/admin') }}">Inicio</a></li>
-                    <li class="breadcrumb-item active">Roles</li>
+                    <li class="breadcrumb-item active">Cancelaciones</li>
                 </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
     <hr>
 @stop
 
 @section('content')
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="card card-outline card-navy">
                 <div class="card-header" style="background-color: #CCF3EA;">
-                    <h3 class="card-title"><b>Roles Registrados</b></h3>
-
-                    <!-- /.card-tools -->
-                    <div class="card-tools">
-                        <a href="{{ route('admin.role.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Nuevo Rol</a>
-                    </div>
+                    <h3 class="card-title"><b>Reservas Canceladas Registradas</b></h3>
                 </div>
+                
                 <!-- /.card-header -->
-                <div class="card-body">
+                <div class="card-body" style="background-color: #f0f5e8;">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
                                 <table id="table1" class="table table-bordered table-striped table-hover table-sm">
                                     <thead>
                                         <th style="width: 10px">Nro</th>
-                                        <th>Rol</th>
+                                        <th>Reserva hecha por</th>
+                                        <th>Cancha reservada</th>
+                                        <th>Fecha y hora de reserva</th>
+                                        <th>Fecha cancelacion</th>
+                                        <th>Motivo</th>
                                         <th>Acciones</th>
                                     </thead>
                                     <tbody>
-                                        @foreach($roles as $role)
+                                        @forelse($cancelaciones as $cancelacion)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td>{{ $role->name }}</td>
-                                            <td class="d-flex justify-content-center">
-                                                <a href="{{ route('admin.role.edit', $role->id) }}" class="btn-icon-circle btn-edit mr-1" title="Editar rol">
-                                                    <i class="fas fa-edit me-1"></i>
-                                                </a>
-                                                <a href="{{ route('admin.role.permiso', $role->id) }}" class="btn-icon-circle btn-pay mr-1" title="Gestionar permisos">
-                                                    <i class="fas fa-user-shield"></i>
-                                                </a>
-                                                <form action="{{ route('admin.role.destroy', $role->id) }}" method="POST"
-                                                    id="miFormulario{{ $role->id }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn-icon-circle btn-delete mr-1"
-                                                        onclick="preguntar{{$role->id}}(event)" 
-                                                        title="Eliminar">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                </form>
-                                                <script>
-                                                    function preguntar{{ $role->id }}(event) {
-                                                        event.preventDefault();
-                                                        console.log('clic detectado');
-                                                        Swal.fire({
-                                                            title: '¿Desea eliminar este registro?',
-                                                            text: '',
-                                                            icon: 'question',
-                                                            showDenyButton: true,
-                                                            confirmButtonText: 'SI',
-                                                            confirmButtonColor: '#a5161d',
-                                                            denyButtonColor: '#270a0a',
-                                                            denyButtonText: 'NO',
-                                                        }).then((result) => {
-                                                            if(result.isConfirmed){
-                                                                document.getElementById('miFormulario{{ $role->id }}').submit();
-                                                            }
-                                                        });
-                                                    }
-                                                </script>
+                                            <td>
+                                                {{ $cancelacion->deportista->user->nombres }} {{ $cancelacion->deportista->user->apellidos }}<br>
+                                                <small class="text-muted">{{ $cancelacion->deportista->user->email }}</small>
+                                            </td>
+                                            <td>
+                                                {{ $cancelacion->reserva->cancha->nombre }}<br>
+                                                <small class="text-muted">
+                                                    {{ $cancelacion->reserva->cancha->espacioDeportivo->nombre ?? '' }}
+                                                </small>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($cancelacion->reserva->fechaReserva)->format('d/m/Y') }}<br>
+                                                {{ \Carbon\Carbon::parse($cancelacion->reserva->horaInicio)->format('H:i') }} - {{ \Carbon\Carbon::parse($cancelacion->reserva->horaFin)->format('H:i') }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($cancelacion->fechaCancelacion)->format('d/m/Y') }}<br>
+                                                {{ \Carbon\Carbon::parse($cancelacion->fechaCancelacion)->format('H:i') }}
+                                            </td>
+                                            <td style="max-width: 250px;">
+                                                <div class="p-2 border rounded bg-light text-truncate" 
+                                                    style="border-color: orange !important; font-size: 0.85rem;">
+                                                    {{ $cancelacion->motivo }}
+                                                </div>
+                                            </td>
+                                            {{-- Acciones --}}
+                                            <td class="align-middle">
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <a href="{{ route('admin.cancelacion.show', $cancelacion->reserva->id) }}" class="btn-icon-circle btn-view mr-1" title="Ver detalles">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="8" class="text-center text-muted">No hay cancelaciones registradas</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -125,16 +122,23 @@
         .btn-icon-circle:hover i {
             color: #ffffff;
         }
+
         /* Estilos de la tabla */
+        table.dataTable tbody td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
         table.dataTable thead {
             background-color: #001737;
             color: #ffffff;
             text-align: center;
         }
+
         #table1_wrapper .dt-buttons {
             background-color: transparent;
             box-shadow: none;
-            border: node;
+            border: none;
             display: flex;
             justify-content: center;
             gap: 10px;
@@ -151,6 +155,12 @@
         .btn-info { background-color: #17a2b8; border: none; }
         .btn-warning { background-color: #ffc107; color: #212529; border: none; }
         /* .btn-default { background-color: #6e7176; color: #212529; border: none; } */
+
+        .badge-fuchsia {
+            background-color: #ADFF2F;
+            color: black;
+        }
+
     </style>
 @stop
 
@@ -159,13 +169,13 @@
         $(function(){
             $("#table1").DataTable({
                 "pageLength":5,
-                "ordering":false,
+                "ordering": false,
                 "language":{
                     "emptyTable": "No hay informacion",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Roles",
-                    "infoEmpty": "Mostrando 0 a 0 de 0 Roles",
-                    "infoFiltered": "(Filtrado de _MAX_ total Roles)",
-                    "lengthMenu": "Mostrar _MENU_ Roles",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Cancelaciones",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 Reservas",
+                    "infoFiltered": "(Filtrado de _MAX_ total Cancelaciones)",
+                    "lengthMenu": "Mostrar _MENU_ Cancelaciones",
                     "loadingRecords": "Cargando...",
                     "processing": "Procesando...",
                     "search": "Buscador:",

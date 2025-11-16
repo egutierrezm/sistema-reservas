@@ -117,4 +117,5 @@ class CanchaController extends Controller
         ->with('mensaje', '¡Cancha eliminada correctamente!')
         ->with('icono', 'success');
     }
+    
 }

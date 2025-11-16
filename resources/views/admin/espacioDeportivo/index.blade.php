@@ -51,8 +51,8 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>{{ $espacioDeportivo->nombre }}</td>
                                             <td>{{ $espacioDeportivo->direccion }}</td>
-                                            <td>{{ $espacioDeportivo->horaApertura }}</td>
-                                            <td>{{ $espacioDeportivo->horaCierre }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($espacioDeportivo->horaApertura)->format('H:i') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($espacioDeportivo->horaCierre)->format('H:i') }}</td>
                                             <td>
                                                 {{ $espacioDeportivo->administradorEspacio->user->nombres ?? '' }} {{ $espacioDeportivo->administradorEspacio->user->apellidos ?? '' }}
                                             </td>

@@ -52,41 +52,49 @@
                                     <small style="color:red">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <!-- Cancha y disciplina -->
-                            <div class="form-group">
-                                <label for="cancha_id">Cancha</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-futbol"></i></span>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- Cancha y disciplina -->
+                                    <div class="form-group">
+                                        <label for="cancha_id">Cancha</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-futbol"></i></span>
+                                            </div>
+                                            <select name="cancha_id" id="cancha_id" class="form-control" required>
+                                                <option value="">Seleccione una cancha</option>
+                                                @foreach($canchas as $cancha)
+                                                    <option value="{{ $cancha->id }}"
+                                                        {{ old('cancha_id', $reserva->cancha_id) == $cancha->id ? 'selected' : '' }}>
+                                                        {{ $cancha->nombre }}  ({{ $cancha->disciplinaDeportivas->pluck('nombre')->join(', ') }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('cancha_id')
+                                            <small style="color:red">{{ $message }}</small>
+                                        @enderror
                                     </div>
-                                    <select name="cancha_id" id="cancha_id" class="form-control" required>
-                                        <option value="">Seleccione una cancha</option>
-                                        @foreach($canchas as $cancha)
-                                            <option value="{{ $cancha->id }}"
-                                                {{ old('cancha_id', $reserva->cancha_id) == $cancha->id ? 'selected' : '' }}>
-                                                {{ $cancha->nombre }}  ({{ $cancha->disciplinaDeportivas->pluck('nombre')->join(', ') }})
-                                            </option>
-                                        @endforeach
-                                    </select>
                                 </div>
-                                @error('cancha_id')
-                                    <small style="color:red">{{ $message }}</small>
-                                @enderror
-                            </div>
-                            <!-- Fecha de reserva -->
-                            <div class="form-group">
-                                <label for="fechaReserva">Fecha de la Reserva</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                                <div class="col-md-6">
+                                    <!-- Fecha de reserva -->
+                                    <div class="form-group">
+                                        <label for="fechaReserva">Fecha de la Reserva</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                                            </div>
+                                            <input type="date" class="form-control" name="fechaReserva" id="fechaReserva"
+                                                value="{{ old('fechaReserva', $reserva->fechaReserva) }}" required>
+                                        </div>
+                                        @error('fechaReserva')
+                                            <small style="color:red">{{ $message }}</small>
+                                        @enderror
                                     </div>
-                                    <input type="date" class="form-control" name="fechaReserva" id="fechaReserva"
-                                        value="{{ old('fechaReserva', $reserva->fechaReserva) }}" required>
                                 </div>
-                                @error('fechaReserva')
-                                    <small style="color:red">{{ $message }}</small>
-                                @enderror
                             </div>
+
                             <!-- Horarios -->
                             <div class="row">
                                 <div class="col-md-6">
@@ -187,6 +195,44 @@
 
 @section('js')
 <script>
+$(function() {
+    $('#participantes').select2({
+        theme: 'classic',
+        placeholder: 'Seleccione participantes',
+        allowClear: true,
+        width: 'resolve'
+    });
+
+    $('#deportista_id').on('change', function() {
+        var selectedId = $(this).val();
+        $('#participantes option').prop('disabled', false);
+
+        if (selectedId) {
+            // Deshabilitar al titular de la reserva
+            $('#participantes option[value="' + selectedId + '"]').prop('disabled', true);
+
+            // Removerlo de la selección si estaba seleccionado
+            var selectedParticipants = $('#participantes').val() || [];
+            var index = selectedParticipants.indexOf(selectedId);
+            if (index > -1) {
+                selectedParticipants.splice(index, 1);
+                $('#participantes').val(selectedParticipants).trigger('change');
+            }
+        }
+
+        // Volver a inicializar Select2
+        $('#participantes').select2({
+            theme: 'classic',
+            placeholder: 'Seleccione uno o varios participantes',
+            allowClear: true,
+            width: 'resolve'
+        });
+    });
+
+    $('#deportista_id').trigger('change');
+});
+
+
 $(function () {
     const canchas = @json($canchas);
     const reserva = @json($reserva);

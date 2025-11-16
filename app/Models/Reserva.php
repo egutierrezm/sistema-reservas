@@ -27,8 +27,7 @@ class Reserva extends Model
         return $this->belongsTo(Cancha::class);
     }
 
-    public function pagos():HasMany
-    {
+    public function pagos():HasMany{
         return $this->hasMany(Pago::class);
     }
 
@@ -36,9 +35,12 @@ class Reserva extends Model
         return $this->belongsToMany(Deportista::class);
     }
     
-    public function codigoQr():HasOne
-    {
+    public function codigoQr():HasOne{
         return $this->hasOne(CodigoQr::class);
+    }
+
+    public function cancelacion(): HasOne{
+        return $this->hasOne(Cancelacion::class);
     }
 
 }

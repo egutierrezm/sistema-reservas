@@ -53,9 +53,11 @@
                                             <td>{{ $reserva->deportista->user->nombres }} {{ $reserva->deportista->user->apellidos }}</td>
                                             <td>
                                                 {{ $reserva->cancha->nombre }} <br>
+                                                <div class="mt-2 p-2 border rounded bg-light text-truncate" style="display: inline-block; min-width: 150px; border-color: orange !important; font-size: 0.875rem;">
                                                 @foreach($reserva->cancha->disciplinaDeportivas as $disciplina)
-                                                    <span class="badge badge-fuchsia d-block mb-1">{{ $disciplina->nombre }}</span>
+                                                    <div>{{ $disciplina->nombre }}</div>
                                                 @endforeach
+                                                </div>
                                             </td>
                                             <td>
                                                 @if($reserva->cancha->imgcancha)
@@ -93,6 +95,55 @@
                                                     <a href="{{ route('admin.pago.create', $reserva->id) }}" class="btn-icon-circle btn-pay mr-1" title="Registrar pago">
                                                         <i class="fas fa-credit-card"></i>
                                                     </a>
+
+{{-- @if($reserva->estado !== 'Cancelada' && $reserva->fechaReserva >= now()->toDateString()) --}}
+                                                    <form action="{{ route('admin.reserva.cancelarReserva', $reserva->id) }}" method="POST" style="display:inline-block;" id="cancelarFormulario{{ $reserva->id }}">
+                                                        @csrf
+                                                        <button type="submit" class="btn-icon-circle btn-cancel mr-1"
+                                                            onclick="confirmarCancelacion(event, {{ $reserva->id }})"
+                                                            title="Cancelar reserva">
+                                                            <i class="fas fa-times-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                    <script>
+                                                        function confirmarCancelacion(event, id) {
+                                                            event.preventDefault();
+
+                                                            Swal.fire({
+                                                                title: '¿Desea cancelar esta reserva?',
+                                                                text: 'Por favor, indique el motivo de la cancelación.',
+                                                                icon: 'warning',
+                                                                input: 'text',
+                                                                inputLabel: 'Motivo',
+                                                                inputPlaceholder: 'Ejemplo: El cliente no asistió...',
+                                                                showCancelButton: true,
+                                                                confirmButtonText: 'SI',
+                                                                confirmButtonColor: '#e0a800',
+                                                                cancelButtonText: 'NO',
+                                                                inputValidator: (value) => {
+                                                                    if (!value) {
+                                                                        return 'Debe ingresar un motivo antes de continuar.';
+                                                                    }
+                                                                }
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    const form = document.getElementById('cancelarFormulario' + id);
+                                                                    
+                                                                    // Crear input oculto con el motivo
+                                                                    const input = document.createElement('input');
+                                                                    input.type = 'hidden';
+                                                                    input.name = 'motivo';
+                                                                    input.value = result.value;
+                                                                    form.appendChild(input);
+
+                                                                    // Enviar formulario
+                                                                    form.submit();
+                                                                }
+                                                            });
+                                                        }
+                                                    </script>
+
+        {{-- @endif --}}
                                                     <form action="{{ route('admin.reserva.destroy', $reserva->id) }}" method="POST"
                                                         id="miFormulario{{ $reserva->id }}">
                                                         @csrf
@@ -193,6 +244,8 @@
         .btn-edit { background-color: #44ce42; border-color: #27ae60; }
         .btn-pay  { background-color: #a461d8; border-color: #8e44ad; }
         .btn-delete { background-color: #fc5a5a; border-color: #c0392b; }
+        .btn-cancel { background-color: #1abc9c; border-color: #16a085; }
+        
         .btn-icon-circle:hover {
             transform: scale(1.15);
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);

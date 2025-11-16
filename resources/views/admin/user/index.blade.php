@@ -19,7 +19,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div class="card card-outline card-navy">
                 <div class="card-header" style="background-color: #CCF3EA;">
                     <h3 class="card-title"><b>Usuarios Registrados</b></h3>
@@ -39,9 +39,8 @@
                                     <thead>
                                         <th style="width: 10px">Nro</th>
                                         <th>Rol del usuario</th>
-                                        <th>CI</th>
-                                        <th>Nombres y apellidos</th>
-                                        <th>Celular</th>
+                                        <th>Apellidos</th>
+                                        <th>Nombres</th>
                                         <th>Estado</th>
                                         <th>Acciones</th>
                                     </thead>
@@ -50,9 +49,8 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>{{ ucfirst(strtolower($usuario->getRoleNames()->implode(', '))) }}</td>
-                                            <td>{{ $usuario->nroDocumento }}</td>
-                                            <td>{{ $usuario->nombres }} {{ $usuario->apellidos }}</td>
-                                            <td>{{ $usuario->celular }}</td>
+                                            <td>{{ $usuario->apellidos }}</td>
+                                            <td>{{ $usuario->nombres }}</td>
                                             <td style="text-align: center">
                                                 @if($usuario->estado == 1)
                                                     <span class="badge badge-success">Activo</span>

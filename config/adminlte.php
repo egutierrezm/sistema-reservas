@@ -317,6 +317,7 @@ return [
             'classes' => 'bg-lime text-white',
         ],
         [
+            'can' => 'admin.role.index',
             'text' => 'Roles',
             'url' => 'admin/role',
             'icon' => 'fas fa-fw fa-user-shield',
@@ -324,6 +325,7 @@ return [
             'active' => ['admin/role*'],
         ],
         [
+            'can' => 'admin.user.index',
             'text' => 'Usuarios',
             'url' => 'admin/user',
             'icon' => 'fas fa-fw fa-users',
@@ -331,6 +333,7 @@ return [
             'active' => ['admin/user*'], 
         ],
         [
+            'can' => 'admin.administradorEspacio.index',
             'text' => 'Administrador Espacios',
             'url' => 'admin/administradorEspacio',
             'icon' => 'fas fa-fw fa-user-friends',
@@ -338,6 +341,7 @@ return [
             'active' => ['admin/administradorEspacio*'], 
         ],
         [
+            'can' => 'admin.espacioDeportivo.index',
             'text' => 'Espacios Deportivos',
             'url' => 'admin/espacioDeportivo',
             'icon' => 'fas fa-fw fa-landmark',
@@ -345,6 +349,7 @@ return [
             'active' => ['admin/espacioDeportivo*'],
         ],
         [
+            'can' => 'admin.disciplinaDeportiva.index',
             'text' => 'Disciplinas Deportivas',
             'url' => 'admin/disciplinaDeportiva',
             'icon' => 'fas fa-fw fa-running',
@@ -352,6 +357,7 @@ return [
             'active' => ['admin/disciplinaDeportiva*'],
         ],
         [
+            'can' => 'admin.cancha.index',
             'text' => 'Canchas',
             'url' => 'admin/cancha',
             'icon' => 'fas fa-fw fa-basketball-ball',
@@ -359,6 +365,7 @@ return [
             'active' => ['admin/cancha*'],
         ],
         [
+            'can' => 'admin.deportista.index',
             'text' => 'Deportistas',
             'url' => 'admin/deportista',
             'icon' => 'fas fa-fw fa-user-edit',
@@ -366,6 +373,7 @@ return [
             'active' => ['admin/deportista*'],
         ],
         [
+            'can' => 'admin.reserva.index',
             'text' => 'Reservas',
             'url' => 'admin/reserva',
             'icon' => 'fas fa-fw fa-calendar-check',
@@ -373,6 +381,7 @@ return [
             'active' => ['admin/reserva*'],
         ],
         [
+            'can' => 'admin.pago.index',
             'text' => 'Pagos',
             'url' => 'admin/pago',
             'icon' => 'fas fa-fw fa-cash-register',
@@ -380,14 +389,43 @@ return [
             'active' => ['admin/pago*'],
         ],
         [
+            'can' => 'admin.codigoQr.index',
             'text' => 'Codigos QR',
             'url' => 'admin/codigoQr',
             'icon' => 'fas fa-fw fa-qrcode',
             'classes' => 'bg-lime text-white',
             'active' => ['admin/codigoQr*'],
         ],
-        ['header' => 'Ajustes del Sistema'],
         [
+            'can' => 'admin.cancelacion.index',
+            'text' => 'Cancelaciones',
+            'url' => 'admin/cancelacion',
+            'icon' => 'fas fa-fw fa-times-circle',
+            'classes' => 'bg-lime text-white',
+            'active' => ['admin/cancelacion*'],
+        ],
+        [
+            'can' => 'admin.controlador.index',
+            'text' => 'Controladores',
+            'url' => 'admin/controlador',
+            'icon' => 'fas fa-fw fa-ticket-alt',
+            'classes' => 'bg-lime text-white',
+            'active' => ['admin/controlador*'],
+        ],
+        [
+            'can' => 'admin.asignacion.index',
+            'text' => 'Asignar canchas',
+            'url' => 'admin/asignacion',
+            'icon' => 'fas fa-fw fa-tasks',
+            'classes' => 'bg-lime text-white',
+            'active' => ['admin/asignacion*'],
+        ],
+        [
+            'can' => 'admin.ajuste.index',
+            'header' => 'Ajustes del Sistema',
+        ],
+        [
+            'can' => 'admin.ajuste.index',
             'text' => 'Ajustes',
             'url' => 'admin/ajuste',
             'icon' => 'fas fa-fw fa-cog',

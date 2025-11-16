@@ -52,9 +52,11 @@
                                             <td>{{ $cancha->espacioDeportivo->nombre }}</td>
                                             <td>{{ $cancha->nombre }}</td>
                                             <td>
-                                                @foreach($cancha->disciplinaDeportivas as $disciplina)
-                                                    <span class="badge badge-fuchsia d-block mb-1">{{ $disciplina->nombre }}</span>
-                                                @endforeach
+                                                <div class="mt-2 p-2 border rounded bg-light text-center text-truncate" style="display: inline-block; min-width: 150px; border-color: orange !important; font-size: 0.875rem;">
+                                                    @foreach($cancha->disciplinaDeportivas as $disciplina)
+                                                        <div>{{ $disciplina->nombre }}</div>
+                                                    @endforeach
+                                                </div>
                                             </td>
                                             <td>{{ $cancha->capacidad }}</td>
                                             <td>{{ $cancha->precioxhora }}</td>

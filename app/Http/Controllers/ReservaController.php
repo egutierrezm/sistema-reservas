@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegistroReservaMail;
 use App\Models\Cancha;
 use App\Models\CodigoQr;
 use App\Models\Deportista;
 use App\Models\Reserva;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
@@ -43,8 +45,6 @@ class ReservaController extends Controller
             'horaInicio' => 'required|date_format:H:i',
             'horaFin' => 'required|date_format:H:i|after:horaInicio',
             'estado' => 'required|string|in:Pendiente,Confirmada,Cancelada',
-            'participantes' => 'nullable|array',
-            'participantes.*' => 'exists:deportistas,id',
         ]);
         $reserva = new Reserva();
         $reserva->deportista_id = $request->deportista_id;
@@ -55,16 +55,9 @@ class ReservaController extends Controller
         $reserva->estado = $request->estado;
         $reserva->save();
 
-        $reserva->participantes()->sync($request->participantes ?? []);
-
         // Generar codigo QR de la reserva
-        $contenido = "Numero de reserva: {$reserva->id}\n".
-                     "Cancha: {$reserva->cancha->nombre}\n".
-                     "Fecha: {$reserva->fechaReserva}\n".
-                     "Hora: {$reserva->horaInicio} - {$reserva->horaFin}\n".
-                     "Cliente: {$reserva->deportista->user->nombres} {$reserva->deportista->user->apellidos}";
-        
-        $qr = QrCode::format('svg')->size(250)->generate($contenido);
+        $urlRegistro = route('register', ['reserva' => $reserva->id]);
+        $qr = QrCode::format('svg')->size(250)->generate($urlRegistro);
         $nombreArchivo = 'qrs/QR_' . $reserva->id . '_' . Str::random(6) . '.svg';
         Storage::disk('public')->put($nombreArchivo, $qr);
 
@@ -74,6 +67,8 @@ class ReservaController extends Controller
         $codigoqr->estado = 'activo';
         $codigoqr->reserva_id = $reserva->id;
         $codigoqr->save();
+
+        Mail::to($reserva->deportista->user->email)->send(new RegistroReservaMail($reserva));
 
         return redirect()->route('admin.reserva.index')
         ->with('mensaje', '¡Reserva registrada correctamente!')
@@ -102,6 +97,13 @@ class ReservaController extends Controller
     {
         // return response()->json($request);
         $reserva = Reserva::find($id);
+
+        if ($reserva->estado === 'Cancelada') {
+            return redirect()->back()
+            ->with('mensaje', 'No se puede modificar una reserva cancelada')
+            ->with('icono', 'error');
+        }
+
         $request->validate([
             'deportista_id' => 'required|exists:deportistas,id',
             'cancha_id' => 'required|exists:canchas,id',
@@ -109,8 +111,6 @@ class ReservaController extends Controller
             'horaInicio' => 'required|date_format:H:i',
             'horaFin' => 'required|date_format:H:i|after:horaInicio',
             'estado' => 'required|string|in:Pendiente,Confirmada,Cancelada',
-            'participantes' => 'nullable|array',
-            'participantes.*' => 'exists:deportistas,id',
         ]);
         $reserva->deportista_id = $request->deportista_id;
         $reserva->cancha_id = $request->cancha_id;
@@ -119,8 +119,6 @@ class ReservaController extends Controller
         $reserva->horaFin = $request->horaFin;
         $reserva->estado = $request->estado;
         $reserva->save();
-
-        $reserva->participantes()->sync($request->participantes ?? []);
 
         //Actualizar codigo QR de la reserva
         $codigoqr = CodigoQr::where('reserva_id', $reserva->id)->first();
@@ -131,13 +129,8 @@ class ReservaController extends Controller
             $codigoqr->codigo = 'QR' . $reserva->id . Str::random(6);
         }
 
-        $contenido = "Numero de reserva: {$reserva->id}\n".
-                     "Cancha: {$reserva->cancha->nombre}\n".
-                     "Fecha: {$reserva->fechaReserva}\n".
-                     "Hora: {$reserva->horaInicio} - {$reserva->horaFin}\n".
-                     "Cliente: {$reserva->deportista->user->nombres} {$reserva->deportista->user->apellidos}";
-
-        $qr = QrCode::format('svg')->size(250)->generate($contenido);
+        $urlRegistro = route('register', ['reserva' => $reserva->id]);
+        $qr = QrCode::format('svg')->size(250)->generate($urlRegistro);
         $nombreArchivo = 'qrs/QR_' . $reserva->id . '_' . Str::random(6) . '.svg';
         Storage::disk('public')->put($nombreArchivo, $qr);
 
@@ -147,6 +140,8 @@ class ReservaController extends Controller
         $codigoqr->reserva_id = $reserva->id;
         $codigoqr->save();
 
+        Mail::to($reserva->deportista->user->email)->send(new RegistroReservaMail($reserva));
+
         return redirect()->route('admin.reserva.index')
         ->with('mensaje', '¡Reserva actualizada correctamente!')
         ->with('icono', 'success');
@@ -155,6 +150,13 @@ class ReservaController extends Controller
     public function destroy(string $id)
     {
         $reserva = Reserva::find($id);
+
+        if ($reserva->estado === 'Cancelada') {
+            return redirect()->back()
+            ->with('mensaje', 'No se puede eliminar una reserva cancelada')
+            ->with('icono', 'error');
+        }
+
         $reserva->participantes()->detach();
         $reserva->delete();
         return redirect()->route('admin.reserva.index')
@@ -172,6 +174,7 @@ class ReservaController extends Controller
         
         $reservas = Reserva::where('cancha_id', $request->cancha_id)
             ->where('fechaReserva', $request->fecha)
+            ->where('estado', '!=', 'Cancelada') // <--- agregar esta línea
             ->when($request->filled('reserva_id'), function ($query) use ($request) {
             $query->where('id', '!=', $request->reserva_id);
         })->get(['horaInicio', 'horaFin']);
@@ -192,6 +195,40 @@ class ReservaController extends Controller
             ];
         }
         return response()->json($bloques);
+    }
+
+    public function cancelarReserva(Request $request, string $id){
+
+        $reserva = Reserva::with('deportista', 'codigoQr')->findOrFail($id);
+
+        if ($reserva->fechaReserva < now()->toDateString()) {
+            return redirect()->back()
+            ->with('mensaje', 'No se puede cancelar una reserva pasada')
+            ->with('icono', 'error');
+        }
+
+        if ($reserva->estado === 'Cancelada') {
+            return redirect()->back()
+            ->with('mensaje', 'La reserva ya fue cancelada')
+            ->with('icono', 'warning');
+        }
+
+        $reserva->estado = 'Cancelada';
+        $reserva->save();
+        $reserva->cancelacion()->create([
+            'motivo' => $request->motivo ?? 'Cancelacion por parte del deportista',
+            'fechaCancelacion' => now(),
+            'deportista_id' => $reserva->deportista_id,
+        ]);
+
+        if ($reserva->codigoQr) {
+            $reserva->codigoQr->estado = 'expirado';
+            $reserva->codigoQr->save();
+        }
+
+        return redirect()->back()
+        ->with('mensaje', 'Reserva cancelada correctamente')
+        ->with('icono', 'success');
     }
 
 }

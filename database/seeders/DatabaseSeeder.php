@@ -6,7 +6,7 @@ use App\Models\AdministradorEspacio;
 use App\Models\User;
 use App\Models\Ajuste;
 use App\Models\Cancha;
-use App\Models\CanchaDisciplinaDeportiva;
+use App\Models\Controlador;
 use App\Models\Deportista;
 use App\Models\EspacioDeportivo;
 use App\Models\DisciplinaDeportiva;
@@ -219,7 +219,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $cancha2 = Cancha::create([
             'nombre' => 'Pukara 2',
-            'descripcion' => 'Cancha de baloncesto y futsal con piso de madera',
+            'descripcion' => 'Cancha de baloncesto y futsal con piso de concreto',
             'capacidad' => 50,
             'precioxhora' => 55.00,
             'imgcancha' => 'canchas/6mXn3FkvVmtAozXdjitsdEjmpY9BmepjDmRTJpMB.jpg',
@@ -238,7 +238,7 @@ class DatabaseSeeder extends Seeder
             'descripcion' => 'Cancha de tenis con piso de tartan',
             'capacidad' => 80,
             'precioxhora' => 78.00,
-            'imgcancha' => null,
+            'imgcancha' => 'canchas/kAaQ9ODteVJ49F3Pn5Y9Moew4mBLYYSHiwNf59dA.jpg',
             'espacio_deportivo_id' => $espdep3->id
         ]);
         $cancha1->disciplinaDeportivas()->attach($futbol->id);
@@ -248,7 +248,7 @@ class DatabaseSeeder extends Seeder
 
         //Seed para Deportista + Reserva + (Cancha + Disciplina Deportiva)
         Reserva::create([
-            'fechaReserva' => '2025-11-03',
+            'fechaReserva' => '2025-11-12',
             'horaInicio' => '10:00:00',
             'horaFin' => '11:00:00',
             'estado' => 'Pendiente',
@@ -257,13 +257,60 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Reserva::create([
-            'fechaReserva' => '2025-11-03',
+            'fechaReserva' => '2025-11-12',
             'horaInicio' => '17:00:00',
             'horaFin' => '18:00:00',
             'estado' => 'Pendiente',
             'deportista_id' => $userdep4->deportista->id,
             'cancha_id' => $cancha2->id
         ]);
+
+        //Seed para Controladores
+        $usercontroller1 = User::create([
+            'name' => 'joaquin',
+            'email' => 'joaquin@gmail.com',
+            'password' => Hash::make('joaquin181'),
+            'tipoDocumento' => 'CI',
+            'nroDocumento' => '10018982',
+            'nombres' => 'Joaquin',
+            'apellidos' => 'Olmos Catacora',
+            'fechaNaci' => '1990-04-23',
+            'celular' => '74533233',
+            'genero' => 'Masculino',
+            'foto' => null,
+            'estado' => true
+        ])->assignRole('CONTROLADOR');
+        Controlador::firstOrCreate(['user_id' => $usercontroller1->id]);
+        $usercontroller2 = User::create([
+            'name' => 'wilmer',
+            'email' => 'wilmer@hotmail.com',
+            'password' => Hash::make('wilmer333'),
+            'tipoDocumento' => 'CI',
+            'nroDocumento' => '19023856',
+            'nombres' => 'Wilmer',
+            'apellidos' => 'Ticona Tarqui',
+            'fechaNaci' => '1997-09-13',
+            'celular' => '77711199',
+            'genero' => 'Masculino',
+            'foto' => null,
+            'estado' => true
+        ])->assignRole('CONTROLADOR');
+        Controlador::firstOrCreate(['user_id' => $usercontroller2->id]);
+        $usercontroller3 = User::create([
+            'name' => 'soledad',
+            'email' => 'soledad@outlook.com',
+            'password' => Hash::make('soledad606'),
+            'tipoDocumento' => 'CI',
+            'nroDocumento' => '13477811',
+            'nombres' => 'Soledad',
+            'apellidos' => 'Copa Burgoa',
+            'fechaNaci' => '1999-07-05',
+            'celular' => '60689343',
+            'genero' => 'Femenino',
+            'foto' => null,
+            'estado' => true
+        ])->assignRole('CONTROLADOR');
+        Controlador::firstOrCreate(['user_id' => $usercontroller3->id]);
     
     }
 }

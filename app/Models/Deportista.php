@@ -16,8 +16,7 @@ class Deportista extends Model
         'user_id'
     ];
 
-    public function user():BelongsTo
-    {
+    public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }
 
@@ -27,6 +26,10 @@ class Deportista extends Model
 
     public function reservaParticipadas():BelongsToMany{
         return $this->belongsToMany(Reserva::class);
+    }
+
+    public function cancelaciones():HasMany{
+        return $this->hasMany(Cancelacion::class);
     }
 
 }

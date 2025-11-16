@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Mail\RegistroUserMail;
 use App\Models\AdministradorEspacio;
+use App\Models\Controlador;
 use App\Models\Deportista;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -84,6 +85,13 @@ class UserController extends Controller
             ]);
         }
 
+        //Controlador
+        if ($request->rol === 'CONTROLADOR') {
+            Controlador::firstOrCreate([
+                'user_id' => $usuario->id,
+            ]);
+        }
+
         return redirect()->route('admin.user.index')
         ->with('mensaje', '¡Usuario registrado correctamente! Hemos enviado una contraseña al correo del usuario')
         ->with('icono', 'success');
@@ -158,6 +166,15 @@ class UserController extends Controller
             ]);
         } else {
             $usuario->deportista?->delete();
+        }
+
+        // Controlador
+        if ($request->rol === 'CONTROLADOR') {
+            Controlador::firstOrCreate([
+                'user_id' => $usuario->id,
+            ]);
+        } else {
+            $usuario->controlador?->delete();
         }
 
         return redirect()->route('admin.user.index')

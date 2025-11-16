@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Deportista;
+use App\Models\Reserva;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -52,6 +54,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'apellidos' => ['required', 'string', 'max:255'],
+            'nombres' => ['required', 'string', 'max:255'],
         ]);
     }
 
@@ -63,10 +67,35 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+
+            'apellidos' => $data['apellidos'],
+            'nombres' => $data['nombres'],
+
+            'tipoDocumento' => null,
+            'nroDocumento' => null,
+            'fechaNaci' => null,
+            'celular' => null,
+            'genero' => null,
         ]);
+        $user->assignRole('DEPORTISTA');
+
+        $deportista = Deportista::firstOrCreate([
+            'user_id' => $user->id,
+        ]);
+
+        if (!empty($data['reserva_id'])) {
+            $reserva = Reserva::find($data['reserva_id']);
+            if ($reserva) {
+                if (!$reserva->participantes->contains($deportista->id)) {
+                    $reserva->participantes()->attach($deportista->id);
+                }
+            }
+        }
+
+        return $user;
     }
 }

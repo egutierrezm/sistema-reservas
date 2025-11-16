@@ -10,7 +10,11 @@ class CodigoQrController extends Controller
 
     public function index()
     {
-        $codigos = CodigoQr::with('reserva.deportista.user', 'reserva.cancha')->get();
+        $codigos = CodigoQr::with([
+            'reserva.deportista.user',
+            'reserva.cancha',
+            'reserva.participantes.user'
+        ])->get();
         return view('admin.codigoQr.index', compact('codigos'));
     }
 

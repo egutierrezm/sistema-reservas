@@ -68,12 +68,6 @@
         <div class="card card-outline card-primary flex-fill">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3 class="card-title"><i class="fas fa-users mr-1"></i> Participantes</h3>
-                <form action="" method="POST" class="ml-auto">
-                    @csrf
-                    <button type="submit" class="btn btn-success btn-sm" style="width: 150px;">
-                        <i class="fas fa-paper-plane"></i> Enviar QR
-                    </button>
-                </form>
             </div>
             <div class="card-body">
                 @if($reserva->participantes->count() > 0)
@@ -133,9 +127,6 @@
 
                 <strong><i class="fas fa-clock fa-fw mr-1 icon-color"></i> Horario</strong>
                 <p class="text-muted">{{ $reserva->horaInicio }} - {{ $reserva->horaFin }}</p>
-
-                <strong><i class="fas fa-calendar-alt mr-1 icon-color"></i> Fecha de creación</strong>
-                <p class="text-muted">{{ $reserva->created_at->isoFormat('dddd, D [de] MMMM [de] YYYY, h:mm A') }}</p>
             </div>
         </div>
     </div>

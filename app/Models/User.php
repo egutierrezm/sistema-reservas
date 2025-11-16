@@ -68,4 +68,9 @@ class User extends Authenticatable
         return $this->hasOne(Deportista::class);
     }
 
+    public function controlador():HasOne
+    {
+        return $this->hasOne(Controlador::class);
+    }
+
 }

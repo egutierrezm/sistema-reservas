@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
 
-            $table->enum('tipoDocumento', ['CI', 'CIE', 'Pasaporte']);
-            $table->string('nroDocumento')->unique();
+            $table->enum('tipoDocumento', ['CI', 'CIE', 'Pasaporte'])->nullable();
+            $table->string('nroDocumento')->unique()->nullable();
             $table->string('nombres');
             $table->string('apellidos');
-            $table->date('fechaNaci');
-            $table->string('celular');
-            $table->enum('genero',['Masculino','Femenino']);
+            $table->date('fechaNaci')->nullable();
+            $table->string('celular')->nullable();
+            $table->enum('genero',['Masculino','Femenino'])->nullable();
             $table->string('foto')->nullable();
             $table->boolean('estado')->default(true);
             $table->softDeletes();

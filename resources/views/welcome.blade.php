@@ -70,6 +70,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem; 
             padding: 1rem 2rem;
         }
 
@@ -231,7 +233,7 @@
         .hero-description {
             font-size: 1.25rem;
             color: var(--text-secondary);
-            margin-bottom: 3rem;
+            /* margin-bottom: 3rem; */
             line-height: 1.6;
             max-width: 600px;
             margin-left: auto;
@@ -685,6 +687,22 @@
         }
 
         @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .d-flex {
+                justify-content: center;
+            }
+
+            .nav-cta {
+                width: 100%;
+                text-align: center;
+                padding: 0.8rem;
+            }
+
             .nav-menu {
                 display: none;
             }
@@ -741,17 +759,13 @@
                 justify-content: center;
             }
         }
-        .nav-cta-secondary {
-    background: #ffffff;
-    color: #000000;
-    border: 2px solid var(--primary-color); /* O usa otro color */
-}
-
-.nav-cta-secondary:hover {
-    background: var(--primary-color);
-    color: #ffffff;
-}
-
+        .d-flex {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
     </style>
     <link type="text/css" rel="stylesheet" charset="UTF-8" href="https://www.gstatic.com/_/translate_http/_/ss/k=translate_http.tr.pgV-E-68K-A.L.W.O/am=AMA/d=0/rs=AN8SPfo2HeflihKMbfgwV84pq3lzEm8ziw/m=el_main_css"></head>
 </head>
@@ -773,9 +787,9 @@
                     <a href="{{ url('/dashboard') }}" class="nav-cta">Dashboard</a>
                 @else
                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                        <a href="{{ route('login') }}" class="nav-cta">Comenzar</a>
+                        <a href="{{ route('login') }}" class="nav-cta">Iniciar</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="nav-cta nav-cta-secondary">Registrarse</a>
+                            <a href="{{ route('register') }}" class="nav-cta">Registrarse</a>
                         @endif
                     </div>
                 @endauth
@@ -788,11 +802,7 @@
             <video autoplay="" muted="" loop="" class="hero-video">
                 <source src="" type="video/mp4">
             </video>
-            {{-- <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1590170335476-4c48875483d0?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1605')"> --}}
-            {{-- <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1562742645-a53a4337a5e1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470')"> --}}
-            {{-- <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1735736158949-a22521878828?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470')"> --}}
-            <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1647118868186-70d38e10b0dc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1469')">
-            {{-- <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1728908053175-59da838b630a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1510')"> --}}
+            <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1562742645-a53a4337a5e1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470')">
             </div>
         </div>
         <div class="hero-content">
@@ -803,7 +813,7 @@
             <p class="hero-description">
                 Disfruta el futuro del deporte con nuestro sistema de reservas, seguro, ágil y automatizado.
             </p>
-            <div class="hero-actions">
+            {{-- <div class="hero-actions">
                 <a href="#" class="btn-primary">
                     <span>Explorar Soluciones</span>
                     <i class="fas fa-arrow-right"></i>
@@ -812,8 +822,8 @@
                     <i class="fas fa-play"></i>
                     <span>Vamos</span>
                 </a>
-            </div>
-            <div class="hero-stats">
+            </div> --}}
+            {{-- <div class="hero-stats">
                 <div class="stat-item">
                     <span class="stat-number">Muchos</span>
                     <span class="stat-label">Espacios Gestionados</span>
@@ -826,7 +836,7 @@
                     <span class="stat-number">99.9%</span>
                     <span class="stat-label">Tiempo Activo</span>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="hero-scroll">

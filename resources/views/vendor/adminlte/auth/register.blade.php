@@ -18,6 +18,42 @@
 @section('auth_body')
     <form action="{{ $registerUrl }}" method="post">
         @csrf
+        {{-- Reserva oculta si viene en la URL --}}
+        @if(request()->has('reserva'))
+            <input type="hidden" name="reserva_id" value="{{ request()->get('reserva') }}">
+        @endif
+
+        {{-- Apellidos --}}
+        <div class="input-group mb-3">
+            <input type="text" name="apellidos" class="form-control @error('apellidos') is-invalid @enderror"
+                value="{{ old('apellidos') }}" placeholder="Apellidos">
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+            @error('apellidos')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+
+        {{-- Nombres --}}
+        <div class="input-group mb-3">
+            <input type="text" name="nombres" class="form-control @error('nombres') is-invalid @enderror"
+                value="{{ old('nombres') }}" placeholder="Nombres" autofocus>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+            @error('nombres')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
 
         {{-- Name field --}}
         <div class="input-group mb-3">
@@ -26,7 +62,7 @@
 
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    <span class="fas fa-user-astronaut {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
 
@@ -62,7 +98,7 @@
 
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    <span class="fas fa-key {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
 

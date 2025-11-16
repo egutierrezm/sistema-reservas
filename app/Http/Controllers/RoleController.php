@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -64,4 +65,35 @@ class RoleController extends Controller
         ->with('mensaje', 'Rol eliminado correctamente')
         ->with('icono', 'success');
     }
+
+    public function permiso(string $id){
+        $role = Role::find($id);
+        $permisos = Permission::all()->groupBy(function($permiso){
+            $name = $permiso->name;
+            if (stripos($name, 'ajuste') !== false) { return 'Ajustes'; }
+            if (stripos($name, 'role') !== false) { return 'Roles'; }
+            if (stripos($name, 'user') !== false) { return 'Usuarios'; }
+            if (stripos($name, 'espacioDeportivo') !== false) { return 'Espacios Deportivos'; }
+            if (stripos($name, 'disciplinaDeportiva') !== false) { return 'Disciplinas Deportivas'; }
+            if (stripos($name, 'cancha') !== false) { return 'Canchas'; }
+            if (stripos($name, 'administradorEspacio') !== false) { return 'Administrador de Espacios'; }
+            if (stripos($name, 'deportista') !== false) { return 'Deportistas'; }
+            if (stripos($name, 'reserva') !== false) { return 'Reservas'; }
+            if (stripos($name, 'pago') !== false) { return 'Pagos'; }
+            if (stripos($name, 'codigoQr') !== false) { return 'Codigos QR'; }
+            if (stripos($name, 'cancelacion') !== false) { return 'Cancelaciones'; }
+            if (stripos($name, 'controlador') !== false) { return 'Controladores'; }
+            if (stripos($name, 'asignacion') !== false) { return 'Asignar canchas'; }
+        });
+        return view('admin.role.permiso',compact('role', 'permisos'));
+    }
+
+    public function updatePermiso(Request $request, string $id){
+        $role = Role::find($id);
+        $role->permissions()->sync($request->permisos);
+        return redirect()->route('admin.role.index')
+        ->with('mensaje', 'Permisos asignados correctamente')
+        ->with('icono', 'success');
+    }
+
 }
