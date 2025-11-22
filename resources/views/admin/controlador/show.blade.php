@@ -48,8 +48,8 @@
             <div class="card-body box-profile text-center">
                 @if($controlador->user->foto)
                     <img class="img-fluid rounded-circle mb-3"
-                        src="{{ asset('storage/' . $controlador->user->foto) }}"
-                        alt="Foto de {{ $deportista->user->nombres }}">
+                        src="{{ asset('storage/fotos/' . $controlador->user->foto) }}"
+                        alt="Foto de {{ $controlador->user->nombres }}">
                 @else
                     <img class="img-fluid rounded-circle mb-3"
                         src="https://cdn-icons-png.flaticon.com/512/149/149071.png"

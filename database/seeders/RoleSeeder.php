@@ -88,6 +88,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'admin.pago.create'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.pago.store'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.pago.edit'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.pago.update'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.pago.destroy'])->syncRoles($superAdmin);
         //Codigo Qr
         Permission::create(['name' => 'admin.codigoQr.index'])->syncRoles($superAdmin);
@@ -108,6 +109,17 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'admin.asignacion.edit'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.asignacion.update'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.asignacion.destroy'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.asignacion.canchasPorEspacio'])->syncRoles($superAdmin);
+        //Valoracion
+        Permission::create(['name' => 'admin.valoracion.index'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.create'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.store'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.edit'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.update'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.destroy'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.canchasPorEspacio'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.comentarioPorCancha'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.valoracion.getValoracionPorCancha'])->syncRoles($superAdmin);
 
     }
 }

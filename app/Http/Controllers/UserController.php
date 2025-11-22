@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
@@ -213,4 +214,71 @@ class UserController extends Controller
             ->with('mensaje', '¡Usuario restaurado correctamente!')
             ->with('icono', 'success');
     }
+
+    public function perfil(){
+        $roles = Role::all();
+        $usuario = User::find(Auth::user()->id);
+        return view('admin.user.perfil', compact('roles', 'usuario'));
+    }
+
+    public function actualizarPerfil(Request $request){
+        // return response()->json($request->all());
+        $usuario = User::find($request->id);
+        $request->validate([
+            'email' => 'required|email|max:255|unique:users,email,'.$request->id.',id',
+            'tipoDocumento' => 'required|in:CI,CIE,Pasaporte',
+            'nroDocumento' => 'required|string|max:20|unique:users,nroDocumento,'.$request->id.',id',
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'fechaNaci' => 'required|date|before:today',
+            'celular' => 'required|string|max:20',
+            'genero' => 'required|in:Masculino,Femenino',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'passwordActual' => 'nullable|string',
+            'passwordNuevo' => 'nullable|string|min:8|required_with:passwordActual',
+            'passwordConfirmacion' => 'nullable|string|same:passwordNuevo|required_with:passwordNuevo',
+        ]);
+        $apellidosArray = explode(' ', $request->apellidos);
+        $iniciales = '';
+        foreach ($apellidosArray as $apellido) {
+            $iniciales = $iniciales . Str::lower(substr($apellido, 0, 1));
+        }
+        $nombre = Str::lower($request->nombres);
+        $nick = $iniciales . $nombre;
+
+        // Guardamos los datos del request
+        $usuario->name = $nick;
+        $usuario->email = $request->email;
+        $usuario->tipoDocumento = $request->tipoDocumento;
+        $usuario->nroDocumento = $request->nroDocumento;
+        $usuario->nombres = $request->nombres;
+        $usuario->apellidos = $request->apellidos;
+        $usuario->fechaNaci = $request->fechaNaci;
+        $usuario->celular = $request->celular;
+        $usuario->genero = $request->genero;
+        if($request->hasFile('foto')){
+            if ($usuario->foto && Storage::disk('public')->exists('fotos/' . $usuario->foto)) {
+                Storage::disk('public')->delete('fotos/' . $usuario->foto);
+            }
+            $fotoPath = $request->file('foto')->store('fotos','public');
+            $usuario->foto = basename($fotoPath);
+        }
+        if($request->filled('passwordActual')){
+            if(!password_verify($request->passwordActual, $usuario->password)){
+                return redirect()->back()
+                ->with('mensaje', 'La contraseña actual es incorrecta')
+                ->with('icono', 'error');
+            }else{
+                $usuario->password = $request->passwordNuevo;
+            }
+        }
+        $usuario->save();
+
+
+        return redirect()->back()
+        ->with('mensaje', '¡Perfil actualizado correctamente!')
+        ->with('icono', 'success');
+
+    }
+
 }

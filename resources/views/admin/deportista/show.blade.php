@@ -51,7 +51,7 @@
             <div class="card-body box-profile text-center">
                 @if($deportista->user->foto)
                     <img class="img-fluid rounded-circle mb-3"
-                        src="{{ asset('storage/' . $deportista->user->foto) }}"
+                        src="{{ asset('storage/fotos/' . $deportista->user->foto) }}"
                         alt="Foto de {{ $deportista->user->nombres }}">
                 @else
                     <img class="img-fluid rounded-circle mb-3"

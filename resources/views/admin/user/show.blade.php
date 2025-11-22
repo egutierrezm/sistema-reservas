@@ -52,9 +52,10 @@
             <div class="card card-info card-outline h-100">
                 <div class="card-body box-profile text-center">
                     @if($usuario->foto)
-                        <img class="profile-user-img img-fluid img-circle"
-                            src="{{ asset('storage/' . $usuario->foto) }}"
-                            alt="Foto de perfil de {{ $usuario->nombres }}">
+                        <img class="img-fluid rounded-circle mb-3"
+                            src="{{ asset('storage/fotos/' . $usuario->foto) }}"
+                            alt="Foto de perfil de {{ $usuario->nombres }}"
+                            style="width: 150px; height: 150px; object-fit: cover;">
                     @else
                         <img class="profile-user-img img-fluid img-circle"
                             src="{{ 'https://ui-avatars.com/api/?name=' . urlencode($usuario->nombres) . '&color=7F9CF5&background=EBF4FF' }}"

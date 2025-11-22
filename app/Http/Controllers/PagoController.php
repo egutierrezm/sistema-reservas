@@ -5,13 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Pago;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PagoController extends Controller
 {
 
     public function index()
     {
-        $pagos = Pago::with('reserva.cancha', 'reserva.deportista.user')->orderBy('fechaPago', 'desc')->get();
+        $user = Auth::user();
+        $roles = $user->roles->pluck('name');
+        if ($roles->contains('DEPORTISTA')) {
+            $pagos = Pago::with('reserva.cancha', 'reserva.deportista.user')
+                ->whereHas('reserva', function($query) use ($user) {
+                    $query->where('deportista_id', $user->deportista->id);
+                })
+                ->orderBy('fechaPago', 'desc')
+                ->get();
+        } else {
+            $pagos = Pago::with('reserva.cancha', 'reserva.deportista.user')
+                ->orderBy('fechaPago', 'desc')
+                ->get();
+        }
+
         return view('admin.pago.index', compact('pagos'));
         // return response()->json($pagos);
     }

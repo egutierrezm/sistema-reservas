@@ -22,7 +22,7 @@
         <div class="col-md-12">
             <div class="card card-outline card-navy">
                 <div class="card-header" style="background-color: #CCF3EA;">
-                    <h3 class="card-title"><b>Canchas Registradas</b></h3>
+                    <h3 class="card-title"><b>Reservas Registradas</b></h3>
 
                     <!-- /.card-tools -->
                     <div class="card-tools">

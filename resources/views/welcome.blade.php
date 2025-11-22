@@ -784,7 +784,7 @@
             </div>
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="nav-cta">Dashboard</a>
+                    <a href="{{ url('/admin') }}" class="nav-cta">Dashboard</a>
                 @else
                     <div class="d-flex flex-wrap gap-2 align-items-center">
                         <a href="{{ route('login') }}" class="nav-cta">Iniciar</a>

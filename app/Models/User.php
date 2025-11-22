@@ -58,6 +58,16 @@ class User extends Authenticatable
         ];
     }
 
+    public function adminlte_image(){
+        return $this->foto
+        ? asset('storage/fotos/' . $this->foto)
+        : asset('https://picsum.photos/300/300');
+    }
+    public function adminlte_desc()
+    {
+        return $this->roles->first()->name ?? 'Sin rol';
+    }
+
     public function administradorEspacio():HasOne
     {
         return $this->hasOne(AdministradorEspacio::class);

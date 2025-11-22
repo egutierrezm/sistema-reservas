@@ -32,4 +32,9 @@ class Deportista extends Model
         return $this->hasMany(Cancelacion::class);
     }
 
+    public function valoraciones():HasMany
+    {
+        return $this->hasMany(Valoracion::class);
+    }
+
 }

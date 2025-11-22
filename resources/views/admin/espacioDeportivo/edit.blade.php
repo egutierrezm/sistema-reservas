@@ -19,7 +19,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="card card-success">
                 <div class="card-header">
                     <h3 class="card-title">Llene los campos del formulario</h3>
@@ -28,113 +28,144 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <form action="{{ route('admin.espacioDeportivo.update', $espacioDeportivo->id) }}" method="POST">
+                    <form action="{{ route('admin.espacioDeportivo.update', $espacioDeportivo->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="administrador_espacio_id">Administrador del Espacio</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                                                </div>
+                                                <select name="administrador_espacio_id" id="administrador_espacio_id" class="form-control" required>
+                                                    <option value="">Seleccione un administrador</option>
+                                                    @foreach($administradores as $admin)
+                                                        <option value="{{ $admin->id }}" 
+                                                            {{ old('administrador_espacio_id', $espacioDeportivo->administrador_espacio_id) == $admin->id ? 'selected' : '' }}>
+                                                            {{ $admin->user->nombres }} {{ $admin->user->apellidos }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('administrador_espacio_id')
+                                                <small style="color: red">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nombre">Nombre</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" name="nombre" id="nombre" value="{{ old('nombre', $espacioDeportivo->nombre) }}" placeholder="Nombre espacio deportivo" required>
+                                            </div>
+                                            @error('nombre')
+                                                <small style="color: red">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="from-group">
+                                            <label for="direccion">Direccion</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-home"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" name="direccion" id="direccion" value="{{ old('direccion', $espacioDeportivo->direccion) }}" placeholder="Direccion" required>
+                                            </div>
+                                            @error('direccion')
+                                                <small style="color: red">{{$message}}</small>
+                                            @enderror  
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="descripcion">Descripcion</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ old('descripcion', $espacioDeportivo->descripcion) }}" placeholder="Descripcion" required>
+                                            </div>
+                                            @error('descripcion')
+                                                <small style="color: red">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="horaApertura">Hora de Apertura</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-hourglass-half"></i></span>
+                                                </div>
+                                                <input type="time" name="horaApertura" id="horaApertura" class="form-control" value="{{ old('horaApertura', \Carbon\Carbon::parse($espacioDeportivo->horaApertura)->format('H:i')) }}" required>
+                                            </div>
+                                            @error('horaApertura')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="horaCierre">Hora de Cierre</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-hourglass-half"></i></span>
+                                                </div>
+                                                <input type="time" name="horaCierre" id="horaCierre" class="form-control" value="{{ old('horaCierre', \Carbon\Carbon::parse($espacioDeportivo->horaCierre)->format('H:i')) }}" required>
+                                            </div>
+                                            @error('horaCierre')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+        
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="administrador_espacio_id">Administrador del Espacio</label>
+                                    <label for="imgespacio">Imagen cancha</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                                            <span class="input-group-text"><i class="fas fa-image"></i></span>
                                         </div>
-                                        <select name="administrador_espacio_id" id="administrador_espacio_id" class="form-control" required>
-                                            <option value="">Seleccione un administrador</option>
-                                            @foreach($administradores as $admin)
-                                                <option value="{{ $admin->id }}" 
-                                                    {{ old('administrador_espacio_id', $espacioDeportivo->administrador_espacio_id) == $admin->id ? 'selected' : '' }}>
-                                                    {{ $admin->user->nombres }} {{ $admin->user->apellidos }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <input type="file" class="form-control" name="imgespacio" accept="image/*" onchange="mostrarImagen(event)">
                                     </div>
-                                    @error('administrador_espacio_id')
+                                    <center>
+                                        <img id="preview" src="{{ $espacioDeportivo->imgespacio ? asset('storage/' . $espacioDeportivo->imgespacio) : '' }}" style="max-width: 200px; margin-top: 10px;">
+                                    </center>
+                                    @error('imgespacio')
                                         <small style="color: red">{{ $message }}</small>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="nombre">Nombre</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-building"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="{{ old('nombre', $espacioDeportivo->nombre) }}" placeholder="Nombre espacio deportivo" required>
-                                    </div>
-                                    @error('nombre')
-                                        <small style="color: red">{{$message}}</small>
-                                    @enderror
-                                </div>
+                                <script>
+                                    const mostrarImagen = e => {
+                                        const preview = document.getElementById('preview');
+                                        if(e.target.files.length > 0){
+                                            preview.src = URL.createObjectURL(e.target.files[0]);
+                                        }
+                                    };
+                                </script>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="from-group">
-                                    <label for="direccion">Direccion</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-home"></i>
-                                            </span>
-                                        </div>
-                                        <input type="text" class="form-control" name="direccion" id="direccion" value="{{ old('direccion', $espacioDeportivo->direccion) }}" placeholder="Direccion" required>
-                                    </div>
-                                    @error('direccion')
-                                        <small style="color: red">{{$message}}</small>
-                                    @enderror  
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="descripcion">Descripcion</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-align-left"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ old('descripcion', $espacioDeportivo->descripcion) }}" placeholder="Descripcion" required>
-                                    </div>
-                                    @error('descripcion')
-                                        <small style="color: red">{{$message}}</small>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="horaApertura">Hora de Apertura</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-hourglass-half"></i></span>
-                                        </div>
-                                        <input type="time" name="horaApertura" id="horaApertura" class="form-control" value="{{ old('horaApertura', \Carbon\Carbon::parse($espacioDeportivo->horaApertura)->format('H:i')) }}" required>
-                                    </div>
-                                    @error('horaApertura')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="horaCierre">Hora de Cierre</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-hourglass-half"></i></span>
-                                        </div>
-                                        <input type="time" name="horaCierre" id="horaCierre" class="form-control" value="{{ old('horaCierre', \Carbon\Carbon::parse($espacioDeportivo->horaCierre)->format('H:i')) }}" required>
-                                    </div>
-                                    @error('horaCierre')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                            </div>
-
-                        </div>
 
                         <hr>
                         <div class="row">

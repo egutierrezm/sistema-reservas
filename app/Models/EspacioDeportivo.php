@@ -17,6 +17,7 @@ class EspacioDeportivo extends Model
         'descripcion',
         'horaApertura',
         'horaCierre',
+        'imgespacio',
         'administrador_espacio_id',
     ];
     

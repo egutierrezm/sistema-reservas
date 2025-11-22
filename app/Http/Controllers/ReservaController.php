@@ -9,6 +9,7 @@ use App\Models\Deportista;
 use App\Models\Reserva;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -19,10 +20,19 @@ class ReservaController extends Controller
 
     public function index()
     {
-        $reservas = Reserva::with([
-            'deportista.user',
-            'cancha.disciplinaDeportivas'
-        ])->get();
+        $user = Auth::user();
+        $roles = $user->roles->pluck('name');
+        if ($roles->contains('DEPORTISTA')) {
+            $reservas = Reserva::with([
+                'deportista.user',
+                'cancha.disciplinaDeportivas'
+            ])->where('deportista_id', $user->deportista->id)->get();
+        } else {
+            $reservas = Reserva::with([
+                'deportista.user',
+                'cancha.disciplinaDeportivas'
+            ])->get();
+        }
         return view('admin.reserva.index', compact('reservas'));
         // return response()->json($reservas);
     }
@@ -68,10 +78,10 @@ class ReservaController extends Controller
         $codigoqr->reserva_id = $reserva->id;
         $codigoqr->save();
 
-        Mail::to($reserva->deportista->user->email)->send(new RegistroReservaMail($reserva));
+        // Mail::to($reserva->deportista->user->email)->send(new RegistroReservaMail($reserva));
 
-        return redirect()->route('admin.reserva.index')
-        ->with('mensaje', '¡Reserva registrada correctamente!')
+        return redirect()->route('admin.reserva.show')
+        ->with('mensaje', '¡Reserva registrada correctamente! Se ha enviado el código QR de su reserva a su correo electrónico. Por favor, proceda con el pago para confirmar la reserva.')
         ->with('icono', 'success');
     }
 
@@ -140,7 +150,7 @@ class ReservaController extends Controller
         $codigoqr->reserva_id = $reserva->id;
         $codigoqr->save();
 
-        Mail::to($reserva->deportista->user->email)->send(new RegistroReservaMail($reserva));
+        // Mail::to($reserva->deportista->user->email)->send(new RegistroReservaMail($reserva));
 
         return redirect()->route('admin.reserva.index')
         ->with('mensaje', '¡Reserva actualizada correctamente!')

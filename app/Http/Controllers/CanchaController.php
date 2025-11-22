@@ -55,6 +55,7 @@ class CanchaController extends Controller
         return redirect()->route('admin.cancha.index')
         ->with('mensaje', '¡Cancha registrada correctamente!')
         ->with('icono', 'success');
+        
     }
 
     public function show(string $id)

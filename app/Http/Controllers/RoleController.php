@@ -84,6 +84,7 @@ class RoleController extends Controller
             if (stripos($name, 'cancelacion') !== false) { return 'Cancelaciones'; }
             if (stripos($name, 'controlador') !== false) { return 'Controladores'; }
             if (stripos($name, 'asignacion') !== false) { return 'Asignar canchas'; }
+            if (stripos($name, 'valoracion') !== false) { return 'Valorar canchas'; }
         });
         return view('admin.role.permiso',compact('role', 'permisos'));
     }

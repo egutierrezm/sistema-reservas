@@ -134,10 +134,10 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
-    'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
+    'usermenu_header' => true,
+    'usermenu_header_class' => 'bg-navy',
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
     'usermenu_profile_url' => false,
 
     /*
@@ -154,8 +154,8 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
+    'layout_fixed_sidebar' => true,
+    'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
@@ -171,12 +171,12 @@ return [
     |
     */
 
-    'classes_auth_card' => 'card-outline card-primary',
+    'classes_auth_card' => 'card-outline card-navy',
     'classes_auth_header' => '',
     'classes_auth_body' => '',
     'classes_auth_footer' => '',
     'classes_auth_icon' => '',
-    'classes_auth_btn' => 'btn-flat btn-primary',
+    'classes_auth_btn' => 'btn-flat btn-success',
 
     /*
     |--------------------------------------------------------------------------
@@ -257,13 +257,13 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
-    'profile_url' => false,
+    'profile_url' => 'perfil',
     'disable_darkmode_routes' => false,
 
     /*
@@ -419,6 +419,14 @@ return [
             'icon' => 'fas fa-fw fa-tasks',
             'classes' => 'bg-lime text-white',
             'active' => ['admin/asignacion*'],
+        ],
+        [
+            'can' => 'admin.valoracion.index',
+            'text' => 'Valoracion de canchas',
+            'url' => 'admin/valoracion',
+            'icon' => 'fas fa-fw fa-star',
+            'classes' => 'bg-lime text-white',
+            'active' => ['admin/valoracion*'],
         ],
         [
             'can' => 'admin.ajuste.index',
@@ -633,12 +641,27 @@ return [
             ],
         ],
         'Chartjs' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                ],
+            ],
+        ],
+        'VanillaCalendar' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js',
                 ],
             ],
         ],

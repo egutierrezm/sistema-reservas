@@ -41,4 +41,9 @@ class Cancha extends Model
                     ->withTimestamps();
     }
 
+    public function valoraciones():HasMany
+    {
+        return $this->hasMany(Valoracion::class);
+    }
+
 }

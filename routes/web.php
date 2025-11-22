@@ -17,6 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EspacioDeportivoController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\ValoracionController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -29,6 +30,11 @@ Auth::routes();
 // Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('/home', [AdminController::class, 'index'])->name('admin.index.home')->middleware('auth');
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
+Route::get('/admin/verCanchas/{id}', [AdminController::class, 'verCanchas'])->name('admin.verCanchas')->middleware('auth');
+
+// Rutas para perfil
+Route::get('/perfil', [UserController::class, 'perfil'])->name('admin.user.perfil')->middleware('auth');
+Route::post('/perfil/update', [UserController::class, 'actualizarPerfil'])->name('admin.user.actualizarPerfil')->middleware('auth');
 
 // Rutas para ajustes
 Route::get('/admin/ajuste', [AjusteController::class, 'index'])->name('admin.ajuste.index')->middleware('auth');
@@ -106,10 +112,11 @@ Route::post('/admin/reserva/cancelarReserva/{id}', [ReservaController::class, 'c
 
 // Rutas para pagos
 Route::get('/admin/pago', [PagoController::class, 'index'])->name('admin.pago.index')->middleware('auth');
-Route::get('/admin/pago/edit/{id}',[PagoController::class, 'edit'])->name('admin.pago.edit')->middleware('auth');
-Route::delete('/admin/pago/destroy/{id}',[PagoController::class, 'destroy'])->name('admin.pago.destroy')->middleware('auth');
 Route::get('/admin/pago/create/{id}', [PagoController::class, 'create'])->name('admin.pago.create')->middleware('auth');
 Route::post('/admin/pago/store/{id}', [PagoController::class, 'store'])->name('admin.pago.store')->middleware('auth');
+Route::get('/admin/pago/edit/{id}',[PagoController::class, 'edit'])->name('admin.pago.edit')->middleware('auth');
+Route::put('/admin/pago/update/{id}',[PagoController::class, 'update'])->name('admin.pago.update')->middleware('auth');
+Route::delete('/admin/pago/destroy/{id}',[PagoController::class, 'destroy'])->name('admin.pago.destroy')->middleware('auth');
 
 // Rutas para el codigo QR
 Route::get('/admin/codigoQr', [CodigoQrController::class, 'index'])->name('admin.codigoQr.index')->middleware('auth');
@@ -126,7 +133,7 @@ Route::get('/admin/controlador', [ControladorController::class, 'index'])->name(
 Route::get('/admin/controlador/show/{id}', [ControladorController::class, 'show'])->name('admin.controlador.show')->middleware('auth');
 
 // Rutas para el controlador mas la cancha
-route::get('/admin/asignacion', [CanchaControladorController::class, 'index'])->name('admin.asignacion.index')->middleware('auth');
+Route::get('/admin/asignacion', [CanchaControladorController::class, 'index'])->name('admin.asignacion.index')->middleware('auth');
 Route::get('/admin/asignacion/create', [CanchaControladorController::class, 'create'])->name('admin.asignacion.create')->middleware('auth');
 Route::post('/admin/asignacion/store', [CanchaControladorController::class, 'store'])->name('admin.asignacion.store')->middleware('auth');
 Route::get('/admin/asignacion/show/{id}', [CanchaControladorController::class, 'show'])->name('admin.asignacion.show')->middleware('auth');
@@ -134,4 +141,15 @@ Route::get('/admin/asignacion/edit/{id}',[CanchaControladorController::class, 'e
 Route::put('/admin/asignacion/update/{id}',[CanchaControladorController::class, 'update'])->name('admin.asignacion.update')->middleware('auth');
 Route::delete('/admin/asignacion/destroy/{id}',[CanchaControladorController::class, 'destroy'])->name('admin.asignacion.destroy')->middleware('auth');
 Route::get('/admin/asignacion/canchasPorEspacio/{id}', [CanchaControladorController::class, 'getCanchasPorEspacio'])->name('admin.asignacion.canchasPorEspacio')->middleware('auth');
+
+// Rutas para valoraciones
+Route::get('/admin/valoracion', [ValoracionController::class, 'index'])->name('admin.valoracion.index')->middleware('auth');
+Route::get('/admin/valoracion/create', [ValoracionController::class, 'create'])->name('admin.valoracion.create')->middleware('auth');
+Route::post('/admin/valoracion/store', [ValoracionController::class, 'store'])->name('admin.valoracion.store')->middleware('auth');
+Route::get('/admin/valoracion/edit/{id}',[ValoracionController::class, 'edit'])->name('admin.valoracion.edit')->middleware('auth');
+Route::put('/admin/valoracion/update/{id}',[ValoracionController::class, 'update'])->name('admin.valoracion.update')->middleware('auth');
+Route::delete('/admin/valoracion/destroy/{id}',[ValoracionController::class, 'destroy'])->name('admin.valoracion.destroy')->middleware('auth');
+Route::get('/admin/valoracion/canchasPorEspacio/{id}', [ValoracionController::class, 'getCanchasPorEspacio'])->name('admin.valoracion.canchasPorEspacio')->middleware('auth');
+Route::get('/admin/valoracion/comentariosPorCancha/{id}', [ValoracionController::class, 'getComentariosPorCancha'])->name('admin.valoracion.comentarioPorCancha')->middleware('auth');
+Route::get('/admin/valoracion/getValoracionPorCancha/{id}', [ValoracionController::class, 'getValoracionPorCancha'])->name('admin.valoracion.getValoracionPorCancha')->middleware('auth');
 

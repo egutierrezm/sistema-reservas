@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('descripcion');
             $table->time('horaApertura');
             $table->time('horaCierre');
+            $table->string('imgespacio')->nullable();
             $table->foreignId('administrador_espacio_id')->nullable()->constrained('administrador_espacios')->onDelete('set null');
             $table->softDeletes();
             $table->timestamps();

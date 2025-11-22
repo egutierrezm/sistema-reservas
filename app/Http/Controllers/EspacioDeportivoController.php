@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdministradorEspacio;
 use App\Models\EspacioDeportivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EspacioDeportivoController extends Controller
 {
@@ -32,6 +33,7 @@ class EspacioDeportivoController extends Controller
             'descripcion' => 'required|string',
             'horaApertura' => 'required|date_format:H:i',
             'horaCierre' => 'required|date_format:H:i',
+            'imgespacio' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'administrador_espacio_id' => 'required|exists:administrador_espacios,id'
         ]);
 
@@ -41,6 +43,10 @@ class EspacioDeportivoController extends Controller
         $espacioDeportivo->descripcion = $request->descripcion;
         $espacioDeportivo->horaApertura = $request->horaApertura;
         $espacioDeportivo->horaCierre = $request->horaCierre;
+        if ($request->hasFile('imgespacio')) {
+            $path = $request->file('imgespacio')->store('espacios', 'public');
+            $espacioDeportivo->imgespacio = $path;
+        }
         $espacioDeportivo->administrador_espacio_id = $request->administrador_espacio_id;
         $espacioDeportivo->save();
         return redirect()->route('admin.espacioDeportivo.index')
@@ -77,6 +83,7 @@ class EspacioDeportivoController extends Controller
             'descripcion' => 'required|string',
             'horaApertura' => 'required|date_format:H:i',
             'horaCierre' => 'required|date_format:H:i',
+            'imgespacio' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'administrador_espacio_id' => 'required|exists:administrador_espacios,id'
         ]);
 
@@ -85,6 +92,13 @@ class EspacioDeportivoController extends Controller
         $espacioDeportivo->descripcion = $request->descripcion;
         $espacioDeportivo->horaApertura = $request->horaApertura;
         $espacioDeportivo->horaCierre = $request->horaCierre;
+        if ($request->hasFile('imgespacio')) {
+            if ($espacioDeportivo->imgespacio && Storage::disk('public')->exists($espacioDeportivo->imgespacio)) {
+                Storage::disk('public')->delete($espacioDeportivo->imgespacio);
+            }
+            $path = $request->file('imgespacio')->store('espacios', 'public');
+            $espacioDeportivo->imgespacio = $path;
+        }
         $espacioDeportivo->administrador_espacio_id = $request->administrador_espacio_id;
         $espacioDeportivo->save();
         return redirect()->route('admin.espacioDeportivo.index')
@@ -97,6 +111,9 @@ class EspacioDeportivoController extends Controller
     {
         $espacioDeportivo = EspacioDeportivo::find($id);
         // return response()->json($espacioDeportivo);
+        if (!empty($espacioDeportivo->imgespacio) && Storage::disk('public')->exists($espacioDeportivo->imgespacio)) {
+            Storage::disk('public')->delete($espacioDeportivo->imgespacio);
+        }
         $espacioDeportivo->delete();
         return redirect()->route('admin.espacioDeportivo.index')
         ->with('mensaje', '¡Espacio deportivo eliminado correctamente!')

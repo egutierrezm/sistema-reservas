@@ -60,14 +60,24 @@
         <div class="col-md-4">
             <div class="card card-info card-outline h-100">
                 <div class="card-body box-profile text-center">
-                    <img class="profile-user-img img-fluid img-circle"
-                        src="https://img.icons8.com/color/96/football2--v1.png"
-                        alt="Icono espacio deportivo">
+                    @if($espacioDeportivo->imgespacio)
+                        <div style="width: 150px; height: 150px; margin: 0 auto; border-radius: 50%; overflow: hidden;">
+                            <img 
+                                src="{{ $espacioDeportivo->imgespacio ? asset('storage/' . $espacioDeportivo->imgespacio) : 'https://img.icons8.com/color/96/football2--v1.png' }}"
+                                alt="Imagen espacio deportivo"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                    @else
+                        <img class="profile-user-img img-fluid img-circle"
+                            src="{{ $espacioDeportivo->imgespacio ? asset('storage/' . $espacioDeportivo->imgespacio) : 'https://img.icons8.com/color/96/football2--v1.png' }}"
+                            alt="Imagen espacio deportivo">
+                    @endif
                     <h3 class="profile-username">{{ $espacioDeportivo->nombre }}</h3>
                     <p class="text-muted">Espacio Deportivo</p>
                 </div>
             </div>
         </div>
+
     </div>
 @stop
 

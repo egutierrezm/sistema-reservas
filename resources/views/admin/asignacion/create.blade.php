@@ -61,7 +61,6 @@
                                         </div>
                                         <select name="cancha_id" id="cancha_id" class="form-control" required>
                                             <option value="">Seleccione una cancha</option>
-                                            <!-- Se llenará dinámicamente vía AJAX -->
                                         </select>
                                     </div>
                                     @error('cancha_id')
