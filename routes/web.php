@@ -109,6 +109,8 @@ Route::put('/admin/reserva/update/{id}',[ReservaController::class, 'update'])->n
 Route::delete('/admin/reserva/destroy/{id}',[ReservaController::class, 'destroy'])->name('admin.reserva.destroy')->middleware('auth');
 Route::get('/admin/reserva/disponibilidad', [ReservaController::class, 'disponibilidad'])->name('admin.reserva.disponibilidad');
 Route::post('/admin/reserva/cancelarReserva/{id}', [ReservaController::class, 'cancelarReserva'])->name('admin.reserva.cancelarReserva')->middleware('auth');
+Route::get('/admin/reserva/canchasPorEspacio/{id}', [ReservaController::class, 'getCanchasPorEspacio'])->name('admin.reserva.canchasPorEspacio')->middleware('auth');
+Route::get('admin/reserva/disciplinasPorCancha/{id}', [ReservaController::class, 'getDisciplinasPorCancha'])->name('admin.reserva.disciplinasPorCancha')->middleware('auth');
 
 // Rutas para pagos
 Route::get('/admin/pago', [PagoController::class, 'index'])->name('admin.pago.index')->middleware('auth');
@@ -123,6 +125,7 @@ Route::get('/admin/codigoQr', [CodigoQrController::class, 'index'])->name('admin
 Route::get('/admin/codigoQr/show/{id}', [CodigoQrController::class, 'show'])->name('admin.codigoQr.show')->middleware('auth');
 Route::get('/admin/codigoQr/edit/{id}',[CodigoQrController::class, 'edit'])->name('admin.codigoQr.edit')->middleware('auth');
 Route::put('/admin/codigoQr/update/{id}',[CodigoQrController::class, 'update'])->name('admin.codigoQr.update')->middleware('auth');
+Route::get('/admin/codigoQr/download/{id}',[CodigoQrController::class, 'download'])->name('admin.codigoQr.download')->middleware('auth');
 
 // Rutas para cancelar reservas
 Route::get('/admin/cancelacion', [CancelacionController::class, 'index'])->name('admin.cancelacion.index')->middleware('auth');
@@ -131,6 +134,7 @@ Route::get('/admin/cancelacion/show/{id}', [CancelacionController::class, 'show'
 // Rutas para el controlador
 Route::get('/admin/controlador', [ControladorController::class, 'index'])->name('admin.controlador.index')->middleware('auth');
 Route::get('/admin/controlador/show/{id}', [ControladorController::class, 'show'])->name('admin.controlador.show')->middleware('auth');
+Route::post('/admin/controlAcceso/{reserva_id}/{deportista_id}', [ControladorController::class, 'accesoQr'])->name('admin.controlAcceso')->middleware('auth');
 
 // Rutas para el controlador mas la cancha
 Route::get('/admin/asignacion', [CanchaControladorController::class, 'index'])->name('admin.asignacion.index')->middleware('auth');

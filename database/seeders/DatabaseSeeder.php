@@ -52,13 +52,13 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '1998-08-15',
             'celular' => '76543210',
             'genero' => 'Masculino',
-            'foto' => '1tWluAkGUE1UXcmz56EaC3yVEnZyCzSzZTPvTA8f.jpg',
+            'foto' => 'SgICebs5grUolOQ4vDeo46jHckdWaO75seaF2FOm.jpg',
             'estado' => true
         ])->assignRole('ADMINISTRADOR');
 
         //Seed para Deportistas
         $userdep1 = User::create([
-            'name' => 'maria',
+            'name' => 'mfernandezl',
             'email' => 'maria@umsa.com',
             'password' => Hash::make('maria349'),
             'tipoDocumento' => 'CI',
@@ -68,12 +68,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '1995-03-22',
             'celular' => '71234567',
             'genero' => 'Femenino',
-            'foto' => null,
+            'foto' => 'PRY2h1oziUKanC9Rgy9lql4XFR744PCLVtTHKxCT.jpg',
             'estado' => true
         ])->assignRole('DEPORTISTA');
         Deportista::firstOrCreate(['user_id' => $userdep1->id]);
         $userdep2 = User::create([
-            'name' => 'alan',
+            'name' => 'abritod',
             'email' => 'alan@hotmail.com',
             'password' => Hash::make('alan606'),
             'tipoDocumento' => 'CI',
@@ -83,12 +83,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '2001-08-05',
             'celular' => '77733373',
             'genero' => 'Masculino',
-            'foto' => null,
+            'foto' => 'JBh6gKdCXkOJcikuBz7KBUhG7LqpFisxcwto5wfY.jpg',
             'estado' => true
         ])->assignRole('DEPORTISTA');
         Deportista::firstOrCreate(['user_id' => $userdep2->id]);
         $userdep3 = User::create([
-            'name' => 'karina',
+            'name' => 'kmamanip',
             'email' => 'karina@gmail.com',
             'password' => Hash::make('karina818'),
             'tipoDocumento' => 'CI',
@@ -98,12 +98,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '1999-05-14',
             'celular' => '76676689',
             'genero' => 'Femenino',
-            'foto' => null,
+            'foto' => 'VqvwgQ36ydswgFeXXOWEAh7bMijmoZYMqMALhclN.jpg',
             'estado' => true
         ])->assignRole('DEPORTISTA');
         Deportista::firstOrCreate(['user_id' => $userdep3->id]);
         $userdep4 = User::create([
-            'name' => 'gabriela',
+            'name' => 'gquevedoc',
             'email' => 'gabriela@outlook.com',
             'password' => Hash::make('gabriela293'),
             'tipoDocumento' => 'CI',
@@ -113,12 +113,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '2005-05-09',
             'celular' => '60923401',
             'genero' => 'Femenino',
-            'foto' => 'I2GqpD988qoHiAyiP6DOshjuW0BME1eXiSQRBb4W.jpg',
+            'foto' => 'SaujnjngvXjaFF7tKcf0Az3G04uCBCQDD6kVaGA8.jpg',
             'estado' => true
         ])->assignRole('DEPORTISTA');
         Deportista::firstOrCreate(['user_id' => $userdep4->id]);
         $userdep5 = User::create([
-            'name' => 'joel',
+            'name' => 'jsalinass',
             'email' => 'joel@gmail.com',
             'password' => Hash::make('joel111'),
             'tipoDocumento' => 'CI',
@@ -128,14 +128,14 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '2005-12-23',
             'celular' => '69027233',
             'genero' => 'Masculino',
-            'foto' => null,
+            'foto' => 'yMoH4D7uuapM244rOYzN64jZ3MlsocZM6L40n2MN.jpg',
             'estado' => true
         ])->assignRole('DEPORTISTA');
         Deportista::firstOrCreate(['user_id' => $userdep5->id]);
         
         // Seed para Administrador de Espacios + Espacio Deportivo
         $useradmin1 = User::create([
-            'name' => 'warita',
+            'name' => 'wandrades',
             'email' => 'wara@gmail.com',
             'password' => Hash::make('wara909'),
             'tipoDocumento' => 'CI',
@@ -145,12 +145,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '2002-10-14',
             'celular' => '69034777',
             'genero' => 'Femenino',
-            'foto' => null,
+            'foto' => 'z2og2UbKIImVVfQizM5bLTpTZHHp3n2DxSRS18K7.jpg',
             'estado' => true
         ])->assignRole('ADMINISTRADOR DE ESPACIOS');
         AdministradorEspacio::firstOrCreate(['user_id' => $useradmin1->id]);
         $useradmin2 = User::create([
-            'name' => 'camila',
+            'name' => 'cauzam',
             'email' => 'camila@outlook.com',
             'password' => Hash::make('camila567'),
             'tipoDocumento' => 'CI',
@@ -160,12 +160,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '2004-11-28',
             'celular' => '66778801',
             'genero' => 'Femenino',
-            'foto' => null,
+            'foto' => 'VyYgk1dWpif1ZkFLblXjckNFplkPYA64WizEHOCN.jpg',
             'estado' => true
         ])->assignRole('ADMINISTRADOR DE ESPACIOS');
         AdministradorEspacio::firstOrCreate(['user_id' => $useradmin2->id]);
         $useradmin3 = User::create([
-            'name' => 'genaro',
+            'name' => 'gmendozaa',
             'email' => 'genaro@gmail.com',
             'password' => Hash::make('genaro744'),
             'tipoDocumento' => 'CI',
@@ -337,7 +337,8 @@ class DatabaseSeeder extends Seeder
             'horaFin' => '11:00:00',
             'estado' => 'Pendiente',
             'deportista_id' => $userdep5->deportista->id,
-            'cancha_id' => $cancha1->id
+            'cancha_id' => $cancha1->id,
+            'disciplina_deportiva_id' => $cancha1->disciplinaDeportivas->first()->id,
         ]);
 
         Reserva::create([
@@ -346,12 +347,13 @@ class DatabaseSeeder extends Seeder
             'horaFin' => '18:00:00',
             'estado' => 'Pendiente',
             'deportista_id' => $userdep4->deportista->id,
-            'cancha_id' => $cancha2->id
+            'cancha_id' => $cancha2->id,
+            'disciplina_deportiva_id' => $cancha2->disciplinaDeportivas->first()->id
         ]);
 
         //Seed para Controladores
         $usercontroller1 = User::create([
-            'name' => 'joaquin',
+            'name' => 'jolmosc',
             'email' => 'joaquin@gmail.com',
             'password' => Hash::make('joaquin181'),
             'tipoDocumento' => 'CI',
@@ -361,12 +363,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '1990-04-23',
             'celular' => '74533233',
             'genero' => 'Masculino',
-            'foto' => null,
+            'foto' => 'ljuhfT1DjjJyHNDHZ8VrtRcx676uG3pjLpSXG5xl.jpg',
             'estado' => true
         ])->assignRole('CONTROLADOR');
         Controlador::firstOrCreate(['user_id' => $usercontroller1->id]);
         $usercontroller2 = User::create([
-            'name' => 'wilmer',
+            'name' => 'wticonat',
             'email' => 'wilmer@hotmail.com',
             'password' => Hash::make('wilmer333'),
             'tipoDocumento' => 'CI',
@@ -376,12 +378,12 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '1997-09-13',
             'celular' => '77711199',
             'genero' => 'Masculino',
-            'foto' => null,
+            'foto' => 'l1v1CifyBDZEhylOy40nkTQdP1csZte3HjYyyGKT.jpg',
             'estado' => true
         ])->assignRole('CONTROLADOR');
         Controlador::firstOrCreate(['user_id' => $usercontroller2->id]);
         $usercontroller3 = User::create([
-            'name' => 'soledad',
+            'name' => 'scopab',
             'email' => 'soledad@outlook.com',
             'password' => Hash::make('soledad606'),
             'tipoDocumento' => 'CI',
@@ -391,7 +393,7 @@ class DatabaseSeeder extends Seeder
             'fechaNaci' => '1999-07-05',
             'celular' => '60689343',
             'genero' => 'Femenino',
-            'foto' => null,
+            'foto' => 'q6IA4XRK7DeJ7DFfCB7TVMDfNORzyE56tOO09vik.jpg',
             'estado' => true
         ])->assignRole('CONTROLADOR');
         Controlador::firstOrCreate(['user_id' => $usercontroller3->id]);

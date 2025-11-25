@@ -25,7 +25,8 @@ class Deportista extends Model
     }
 
     public function reservaParticipadas():BelongsToMany{
-        return $this->belongsToMany(Reserva::class);
+        return $this->belongsToMany(Reserva::class)
+                    ->withPivot('ingreso', 'qr_image', 'fechaIngreso');
     }
 
     public function cancelaciones():HasMany{

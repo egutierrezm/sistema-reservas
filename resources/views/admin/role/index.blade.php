@@ -30,12 +30,12 @@
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body">
+                <div class="card-body bg-dark">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                                <table id="table1" class="table table-bordered table-striped table-hover table-sm">
-                                    <thead>
+                                <table id="table1" class="table table-dark table-bordered table-striped table-hover table-sm">
+                                    <thead class="thead-light">
                                         <th style="width: 10px">Nro</th>
                                         <th>Rol</th>
                                         <th>Acciones</th>
@@ -127,8 +127,8 @@
         }
         /* Estilos de la tabla */
         table.dataTable thead {
-            background-color: #001737;
-            color: #ffffff;
+            /* background-color: #001737;
+            color: #ffffff; */
             text-align: center;
         }
         #table1_wrapper .dt-buttons {

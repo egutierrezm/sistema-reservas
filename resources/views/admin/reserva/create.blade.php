@@ -24,37 +24,35 @@
             <div class="card-header">
                 <h3 class="card-title">Complete los datos de la reserva</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body bg-dark">
                 <form action="{{ route('admin.reserva.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <!-- SECCIÓN IZQUIERDA -->
                         <div class="col-md-7">
-                            <!-- Deportista -->
-                            <div class="form-group">
-                                <label for="deportista_id">Reservado por</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                    </div>
-                                    <select name="deportista_id" id="deportista_id" class="form-control" required>
-                                        <option value="">Seleccione un deportista</option>
-                                        @foreach($deportistas as $deportista)
-                                            <option value="{{ $deportista->id }}"
-                                                {{ old('deportista_id') == $deportista->id ? 'selected' : '' }}>
-                                                {{ $deportista->user->nombres }} {{ $deportista->user->apellidos }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('deportista_id')
-                                    <small style="color:red">{{ $message }}</small>
-                                @enderror
-                            </div>
-
                             <div class="row">
                                 <div class="col-md-6">
-                                    <!-- Cancha y disciplina -->
+                                    {{-- espacios --}}
+                                    <div class="form-group">
+                                        <label for="espacio_id">Espacio Deportivo</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                            </div>
+                                            <select name="espacio_id" id="espacio_id" class="form-control" required>
+                                                <option value="">Seleccione un espacio</option>
+                                                @foreach($espacios as $espacio)
+                                                    <option value="{{ $espacio->id }}">{{ $espacio->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('espacio_id')
+                                            <small style="color: red">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- Canchas -->
                                     <div class="form-group">
                                         <label for="cancha_id">Cancha</label>
                                         <div class="input-group mb-3">
@@ -63,15 +61,30 @@
                                             </div>
                                             <select name="cancha_id" id="cancha_id" class="form-control" required>
                                                 <option value="">Seleccione una cancha</option>
-                                                @foreach($canchas as $cancha)
-                                                    <option value="{{ $cancha->id }}"
-                                                        {{ old('cancha_id') == $cancha->id ? 'selected' : '' }}>
-                                                        {{ $cancha->nombre }}  ({{ $cancha->disciplinaDeportivas->pluck('nombre')->join(', ') }})
-                                                    </option>
-                                                @endforeach
                                             </select>
                                         </div>
                                         @error('cancha_id')
+                                            <small style="color:red">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{-- disciplinas --}}
+                                    <div class="form-group">
+                                        <label for="disciplina_id">Disciplina</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-running"></i></span>
+                                            </div>
+                                            <select name="disciplina_id" id="disciplina_id" class="form-control" required>
+                                                <option value="">Seleccione una disciplina</option>
+                                            </select>
+                                        </div>
+                                        @error('disciplina_id')
                                             <small style="color:red">{{ $message }}</small>
                                         @enderror
                                     </div>
@@ -127,23 +140,50 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Estado -->
-                            <div class="form-group">
-                                <label for="estado">Estado de la Reserva</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- Deportista -->
+                                    <div class="form-group">
+                                        <label for="deportista_id">Reservado por</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            <select name="deportista_id" id="deportista_id" class="form-control" required>
+                                                <option value="">Seleccione un deportista</option>
+                                                @foreach($deportistas as $deportista)
+                                                    <option value="{{ $deportista->id }}"
+                                                        {{ old('deportista_id') == $deportista->id ? 'selected' : '' }}>
+                                                        {{ $deportista->user->nombres }} {{ $deportista->user->apellidos }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('deportista_id')
+                                            <small style="color:red">{{ $message }}</small>
+                                        @enderror
                                     </div>
-                                    <select name="estado" id="estado" class="form-control" required>
-                                        <option value="">Seleccione un estado</option>
-                                        <option value="Pendiente" {{ old('estado') == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                        <option value="Confirmada" {{ old('estado') == 'Confirmada' ? 'selected' : '' }}>Confirmada</option>
-                                        <option value="Cancelada" {{ old('estado') == 'Cancelada' ? 'selected' : '' }}>Cancelada</option>
-                                    </select>
                                 </div>
-                                @error('estado')
-                                    <small style="color:red">{{ $message }}</small>
-                                @enderror
+                                <div class="col-md-6">
+                                    <!-- Estado -->
+                                    <div class="form-group">
+                                        <label for="estado">Estado de la Reserva</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                                            </div>
+                                            <select name="estado" id="estado" class="form-control" required>
+                                                <option value="">Seleccione un estado</option>
+                                                <option value="Pendiente" {{ old('estado') == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                                <option value="Confirmada" {{ old('estado') == 'Confirmada' ? 'selected' : '' }}>Confirmada</option>
+                                                <option value="Cancelada" {{ old('estado') == 'Cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                            </select>
+                                        </div>
+                                        @error('estado')
+                                            <small style="color:red">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- SECCIÓN DERECHA -->
@@ -164,10 +204,10 @@
                     <hr>
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <a href="{{ route('admin.reserva.index') }}" class="btn btn-outline-secondary me-2">
+                            <a href="{{ route('admin.reserva.index') }}" class="btn btn-light me-2">
                                 <i class="fas fa-arrow-left me-1"></i> Regresar
                             </a>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-success">
                                 <i class="fas fa-save me-1"></i> Guardar Reserva
                             </button>
                         </div>
@@ -312,4 +352,55 @@ $(function () {
 });
 </script>
 
+{{-- Seleccionar espacios --}}
+<script>
+$(document).ready(function() {
+    $('#espacio_id').change(function() {
+        var espacioID = $(this).val();
+        if(espacioID) {
+            $.ajax({
+                url: "{{ url('admin/reserva/canchasPorEspacio') }}/" + espacioID,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#cancha_id').empty();
+                    $('#cancha_id').append('<option value="">Seleccione una cancha</option>');
+                    $.each(data, function(key, value) {
+                        $('#cancha_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
+                    });
+                }
+            });
+        } else {
+            $('#cancha_id').empty();
+            $('#cancha_id').append('<option value="">Seleccione una cancha</option>');
+        }
+    });
+});
+</script>
+{{-- Seleccionar disciplinas --}}
+<script>
+    $(document).ready(function() {
+    $('#cancha_id').change(function() {
+        var canchaID = $(this).val();
+
+        if (canchaID) {
+            $.ajax({
+                url: "{{ url('admin/reserva/disciplinasPorCancha') }}/" + canchaID,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#disciplina_id').empty();
+                    $('#disciplina_id').append('<option value="">Seleccione una disciplina</option>');
+                    $.each(data, function(key, value) {
+                        $('#disciplina_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
+                    });
+                }
+            });
+        } else {
+            $('#disciplina_id').empty();
+            $('#disciplina_id').append('<option value="">Seleccione una disciplina</option>');
+        }
+    });
+});
+</script>
 @stop

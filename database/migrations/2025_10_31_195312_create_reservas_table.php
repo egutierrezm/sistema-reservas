@@ -18,7 +18,8 @@ return new class extends Migration
             $table->time('horaFin');
             $table->enum('estado', ['Pendiente', 'Confirmada', 'Cancelada'])->default('Pendiente');
             $table->foreignId('deportista_id')->constrained('deportistas')->onDelete('cascade');
-            $table->foreignId('cancha_id')->constrained('canchas')->onDelete('cascade');;
+            $table->foreignId('cancha_id')->constrained('canchas')->onDelete('cascade');
+            $table->foreignId('disciplina_deportiva_id')->constrained('disciplina_deportivas')->onDelete('cascade');
             $table->timestamps();
         });
     }

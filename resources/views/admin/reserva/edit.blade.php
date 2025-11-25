@@ -5,15 +5,15 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">Modificar Datos de la Reserva de: {{ $reserva->deportista->user->nombres }}</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/admin') }}">Inicio</a></li>
                     <li class="breadcrumb-item active"><a href="">Modificar datos</a></li>
                 </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
     <hr>
 @stop
 
@@ -24,7 +24,7 @@
             <div class="card-header">
                 <h3 class="card-title">Modifique los campos del formulario</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body bg-dark">
                 <form action="{{ route('admin.reserva.update', $reserva->id) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -38,15 +38,12 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     </div>
-                                    <select name="deportista_id" id="deportista_id" class="form-control" required>
-                                        <option value="">Seleccione un deportista</option>
-                                        @foreach($deportistas as $deportista)
-                                            <option value="{{ $deportista->id }}"
-                                                {{ old('deportista_id', $reserva->deportista_id) == $deportista->id ? 'selected' : '' }}>
-                                                {{ $deportista->user->nombres }} {{ $deportista->user->apellidos }}
-                                            </option>
-                                        @endforeach
+                                    <select class="form-control" disabled>
+                                        <option selected>
+                                            {{ $reserva->deportista->user->nombres }} {{ $reserva->deportista->user->apellidos }}
+                                        </option>
                                     </select>
+                                    <input type="hidden" name="deportista_id" value="{{ $reserva->deportista_id }}">
                                 </div>
                                 @error('deportista_id')
                                     <small style="color:red">{{ $message }}</small>
@@ -55,7 +52,19 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <!-- Cancha y disciplina -->
+                                    <div class="form-group">
+                                        <label>Espacio Deportivo</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{ $reserva->cancha->espacioDeportivo->nombre }}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <!-- Canchas -->
                                     <div class="form-group">
                                         <label for="cancha_id">Cancha</label>
                                         <div class="input-group mb-3">
@@ -64,18 +73,32 @@
                                             </div>
                                             <select name="cancha_id" id="cancha_id" class="form-control" required>
                                                 <option value="">Seleccione una cancha</option>
-                                                @foreach($canchas as $cancha)
-                                                    <option value="{{ $cancha->id }}"
-                                                        {{ old('cancha_id', $reserva->cancha_id) == $cancha->id ? 'selected' : '' }}>
-                                                        {{ $cancha->nombre }}  ({{ $cancha->disciplinaDeportivas->pluck('nombre')->join(', ') }})
-                                                    </option>
-                                                @endforeach
                                             </select>
                                         </div>
                                         @error('cancha_id')
                                             <small style="color:red">{{ $message }}</small>
                                         @enderror
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{-- disciplinas --}}
+                                    <div class="form-group">
+                                        <label for="disciplina_deportiva_id">Disciplina</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-running"></i></span>
+                                            </div>
+                                            <select name="disciplina_deportiva_id" id="disciplina_deportiva_id" class="form-control" required>
+                                                <option value="">Seleccione una disciplina</option>
+                                            </select>
+                                        </div>
+                                        @error('disciplina_id')
+                                            <small style="color:red">{{ $message }}</small>
+                                        @enderror
+                                    </div>                                    
                                 </div>
                                 <div class="col-md-6">
                                     <!-- Fecha de reserva -->
@@ -163,10 +186,10 @@
                         </div>
                     </div>
 
-                    <hr>
+                    <hr class="bg-light">
                     <div class="row">
                         <div class="col-md-12 mt-3">
-                            <a href="{{ route('admin.reserva.index') }}" class="btn btn-outline-secondary me-2">
+                            <a href="{{ route('admin.reserva.index') }}" class="btn btn-light me-2">
                                 <i class="fas fa-arrow-left me-1"></i> Regresar
                             </a>
                             <button type="submit" class="btn btn-success">
@@ -195,64 +218,22 @@
 
 @section('js')
 <script>
-$(function() {
-    $('#participantes').select2({
-        theme: 'classic',
-        placeholder: 'Seleccione participantes',
-        allowClear: true,
-        width: 'resolve'
-    });
-
-    $('#deportista_id').on('change', function() {
-        var selectedId = $(this).val();
-        $('#participantes option').prop('disabled', false);
-
-        if (selectedId) {
-            // Deshabilitar al titular de la reserva
-            $('#participantes option[value="' + selectedId + '"]').prop('disabled', true);
-
-            // Removerlo de la selección si estaba seleccionado
-            var selectedParticipants = $('#participantes').val() || [];
-            var index = selectedParticipants.indexOf(selectedId);
-            if (index > -1) {
-                selectedParticipants.splice(index, 1);
-                $('#participantes').val(selectedParticipants).trigger('change');
-            }
-        }
-
-        // Volver a inicializar Select2
-        $('#participantes').select2({
-            theme: 'classic',
-            placeholder: 'Seleccione uno o varios participantes',
-            allowClear: true,
-            width: 'resolve'
-        });
-    });
-
-    $('#deportista_id').trigger('change');
-});
-
-
 $(function () {
     const canchas = @json($canchas);
     const reserva = @json($reserva);
-
     if (reserva.cancha_id) {
         mostrarCancha(reserva.cancha_id);
     }
-
     if (reserva.cancha_id && reserva.fechaReserva) {
         $('#cancha_id').val(reserva.cancha_id);
         $('#fechaReserva').val(reserva.fechaReserva);
         cargarHorariosDisponibles();
     }
-
     $('#cancha_id').on('change', function () {
         const id = $(this).val();
         mostrarCancha(id);
         if ($('#fechaReserva').val()) cargarHorariosDisponibles();
     });
-
     $('#fechaReserva').on('change', function () {
         if ($('#cancha_id').val()) cargarHorariosDisponibles();
     });
@@ -276,7 +257,6 @@ $(function () {
             $('#previewCancha').hide();
         }
     }
-
     function cargarHorariosDisponibles() {
         const fecha = $('#fechaReserva').val();
         const cancha_id = $('#cancha_id').val();
@@ -330,6 +310,44 @@ $(function () {
             }
         });
     }
+});
+</script>
+{{-- Canchas y disciplinas --}}
+<script>
+$(document).ready(function() {
+    const reserva = @json($reserva);
+    $.ajax({
+        url: "{{ url('admin/reserva/canchasPorEspacio') }}/" + reserva.cancha.espacio_deportivo_id,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            $('#cancha_id').empty().append('<option value="">Seleccione una cancha</option>');
+            $.each(data, function(key, value) {
+                $('#cancha_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
+            });
+            $('#cancha_id').val(reserva.cancha_id).trigger('change');
+        }
+    });
+    $('#cancha_id').change(function() {
+        var canchaID = $(this).val();
+        $('#disciplina_deportiva_id').empty().append('<option value="">Seleccione una disciplina</option>');
+
+        if (canchaID) {
+            $.ajax({
+                url: "{{ url('admin/reserva/disciplinasPorCancha') }}/" + canchaID,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $.each(data, function(key, value) {
+                        $('#disciplina_deportiva_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
+                    });
+                    if (reserva.disciplina_deportiva_id && data.some(d => d.id == reserva.disciplina_deportiva_id)) {
+                        $('#disciplina_deportiva_id').val(reserva.disciplina_deportiva_id);
+                    }
+                }
+            });
+        }
+    });
 });
 </script>
 

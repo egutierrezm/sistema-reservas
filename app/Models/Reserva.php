@@ -16,15 +16,21 @@ class Reserva extends Model
         'horaFin',
         'estado',
         'deportista_id',
-        'cancha_id'
+        'cancha_id',
+        'disciplina_deportiva_id'
     ];
 
     public function deportista():BelongsTo{
         return $this->belongsTo(Deportista::class);
     }
 
-    public function cancha(): BelongsTo {
+    public function cancha():BelongsTo {
         return $this->belongsTo(Cancha::class);
+    }
+
+    public function disciplina():BelongsTo
+    {
+        return $this->belongsTo(DisciplinaDeportiva::class, 'disciplina_deportiva_id');
     }
 
     public function pagos():HasMany{
@@ -32,7 +38,8 @@ class Reserva extends Model
     }
 
     public function participantes():BelongsToMany{
-        return $this->belongsToMany(Deportista::class);
+        return $this->belongsToMany(Deportista::class)
+                    ->withPivot('ingreso', 'qr_image', 'fechaIngreso');
     }
     
     public function codigoQr():HasOne{
@@ -41,6 +48,14 @@ class Reserva extends Model
 
     public function cancelacion(): HasOne{
         return $this->hasOne(Cancelacion::class);
+    }
+
+    public function estaPagada():bool
+    {
+        $montoTotal = $this->cancha->precioxhora;
+        $totalPagado = $this->pagos()->sum('monto');
+
+        return $totalPagado >= $montoTotal;
     }
 
 }

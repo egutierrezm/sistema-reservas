@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RegisterController extends Controller
 {
@@ -90,8 +92,20 @@ class RegisterController extends Controller
         if (!empty($data['reserva_id'])) {
             $reserva = Reserva::find($data['reserva_id']);
             if ($reserva) {
+                // $reserva->participantes()->attach($deportista->id);
                 if (!$reserva->participantes->contains($deportista->id)) {
-                    $reserva->participantes()->attach($deportista->id);
+                    $urlAcceso = route('admin.controlAcceso', [
+                        'reserva_id' => $reserva->id,
+                        'deportista_id' => $deportista->id
+                    ]);
+                    $qrFileName = 'qrs/ingreso_reserva_'.$reserva->id.'_dep_'.$deportista->id.'.svg';
+                    $qr = QrCode::format('svg')->size(300)->generate($urlAcceso);
+                    Storage::disk('public')->put($qrFileName, $qr);
+                    $reserva->participantes()->attach($deportista->id, [
+                        'ingreso' => false,
+                        'fechaIngreso' => null,
+                        'qr_image' => $qrFileName
+                    ]);
                 }
             }
         }

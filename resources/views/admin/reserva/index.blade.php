@@ -5,15 +5,15 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">LISTADO DE RESERVAS</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/admin') }}">Inicio</a></li>
                     <li class="breadcrumb-item active">Reservas</li>
                 </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
     <hr>
 @stop
 
@@ -31,15 +31,15 @@
                 </div>
                 
                 <!-- /.card-header -->
-                <div class="card-body" style="background-color: #f0f5e8;">
+                <div class="card-body bg-dark" style="background-color: #f0f5e8;">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                                <table id="table1" class="table table-bordered table-striped table-hover table-sm">
-                                    <thead>
+                                <table id="table1" class="table table-dark table-bordered table-striped table-hover table-sm">
+                                    <thead class="thead-light">
                                         <th style="width: 10px">Nro</th>
                                         <th>Deportista</th>
-                                        <th>Cancha y disciplinas</th>
+                                        <th>Cancha y disciplina</th>
                                         <th>Imagen</th>
                                         <th>Fecha y hora</th>
                                         <th>Precio</th>
@@ -54,9 +54,9 @@
                                             <td>
                                                 {{ $reserva->cancha->nombre }} <br>
                                                 <div class="mt-2 p-2 border rounded bg-light text-truncate" style="display: inline-block; min-width: 150px; border-color: orange !important; font-size: 0.875rem;">
-                                                @foreach($reserva->cancha->disciplinaDeportivas as $disciplina)
-                                                    <div>{{ $disciplina->nombre }}</div>
-                                                @endforeach
+                                                
+                                                    <div>{{ $reserva->disciplina->nombre }}</div>
+                                                
                                                 </div>
                                             </td>
                                             <td>
@@ -261,8 +261,8 @@
         }
 
         table.dataTable thead {
-            background-color: #001737;
-            color: #ffffff;
+            /* background-color: #001737;
+            color: #ffffff; */
             text-align: center;
         }
 

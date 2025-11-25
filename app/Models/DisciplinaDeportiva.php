@@ -20,4 +20,8 @@ class DisciplinaDeportiva extends Model
         return $this->belongsToMany(Cancha::class);
     }
 
+    public function reservas():HasMany{
+        return $this->hasMany(Reserva::class);
+    }
+
 }

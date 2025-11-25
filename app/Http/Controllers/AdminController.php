@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cancha;
+use App\Models\CanchaControlador;
+use App\Models\Controlador;
 use App\Models\Deportista;
 use App\Models\EspacioDeportivo;
 use App\Models\Pago;
@@ -73,6 +75,31 @@ class AdminController extends Controller
         if($roles->contains('DEPORTISTA')){
             $espacios = EspacioDeportivo::all();
             return view('admin.deportistaespacios', compact('espacios'));
+        }
+        if($roles->contains('ADMINISTRADOR DE ESPACIOS')){
+            return view('admin.administradorespacios');
+        }
+        if($roles->contains('CONTROLADOR')){
+            $controlador = Controlador::where('user_id', Auth::id())->first();
+            $asignaciones = CanchaControlador::where('controlador_id', $controlador->id)->get();
+            $turnos = [
+                'Mañana' => ['08:00:00', '12:00:00'],
+                'Tarde'  => ['12:00:00', '18:00:00'],
+                'Noche'  => ['18:00:00', '20:00:00'],
+            ];
+            $reservas = collect();
+            foreach ($asignaciones as $asig) {
+                $rango = $turnos[$asig->turnoAsignado];
+                $reservasTurno = Reserva::with(['cancha', 'disciplina', 'participantes.user'])
+                    ->where('cancha_id', $asig->cancha_id)
+                    ->whereDate('fechaReserva', $asig->fechaAsignacion)
+                    ->whereTime('horaInicio', '>=', $rango[0])
+                    ->whereTime('horaFin', '<=', $rango[1])
+                    ->whereDoesntHave('cancelacion')
+                    ->get();
+                $reservas = $reservas->merge($reservasTurno);
+            }
+            return view('admin.controladorcanchas', compact('reservas'));
         }
     }
 

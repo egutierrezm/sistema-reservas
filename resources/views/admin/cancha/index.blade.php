@@ -31,12 +31,12 @@
                 </div>
                 
                 <!-- /.card-header -->
-                <div class="card-body" style="background-color: #f0f5e8;">
+                <div class="card-body bg-dark">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                                <table id="table1" class="table table-bordered table-striped table-hover table-sm">
-                                    <thead>
+                                <table id="table1" class="table table-dark table-bordered table-striped table-hover table-sm">
+                                    <thead class="thead-light">
                                         <th style="width: 10px">Nro</th>
                                         <th>Espacio deportivo</th>
                                         <th>Cancha</th>

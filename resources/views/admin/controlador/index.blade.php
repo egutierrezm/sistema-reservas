@@ -32,10 +32,10 @@
                     <h3 class="card-title"><b>Controladores Registrados</b></h3>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body bg-dark">
                     <div class="table-responsive">
-                        <table id="table1" class="table table-bordered table-striped table-hover table-sm">
-                            <thead>
+                        <table id="table1" class="table table-dark table-bordered table-striped table-hover table-sm">
+                            <thead class="thead-light">
                                 <tr>
                                     <th style="width: 15px">Nro</th>
                                     <th>Nombres</th>
@@ -102,8 +102,8 @@
 
         /* Estilos de la tabla */
         table.dataTable thead {
-            background-color: #001737;
-            color: #ffffff;
+            /* background-color: #001737;
+            color: #ffffff; */
             text-align: center;
         }
 

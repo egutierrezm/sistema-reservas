@@ -144,8 +144,8 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card card-outline card-navy">
-                            <div class="card-header">
+                        <div class="card card-outline card-success">
+                            <div class="card-header bg-dark">
                                 <h3 class="card-title"><i class="fas fa-money-bill-wave"></i> <b>Ingresos mensuales</b></h3>
                             </div>
                             <div class="card-body">
@@ -154,8 +154,8 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card card-outline card-navy">
-                            <div class="card-header">
+                        <div class="card card-outline card-success">
+                            <div class="card-header bg-dark">
                                 <h3 class="card-title"><i class="fas fa-futbol"></i> <b>Reservas por espacios</b></h3>
                             </div>
                             <div class="card-body">
@@ -169,8 +169,8 @@
             <div class="col-md-3">
                 <h3 id="reloj-hora" class="text-center font-weight-bold"></h3>
                 <h6 id="reloj-fecha" class="text-center"></h6>
-                <div class="card card-outline card-navy">
-                    <div class="card-header">
+                <div class="card card-outline card-success">
+                    <div class="card-header bg-dark">
                         <h3 class="card-title"><i class="fas fa-calendar-alt"></i> <b>Calendario</b></h3>
                     </div>
                     <!-- /.card-header -->
@@ -190,7 +190,7 @@
 
 @section('css')
 <style>
-    .info-box {
+    /* .info-box {
         border-radius: 8px;
         overflow: hidden;
         transition: transform .2s ease, box-shadow .2s ease;
@@ -208,7 +208,7 @@
     .info-box-number {
         color: #2DD4FF;
         font-weight: bold;
-    }
+    } */
 </style>
 @stop
 

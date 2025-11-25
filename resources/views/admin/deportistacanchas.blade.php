@@ -108,10 +108,21 @@
                 <div class="modal-body">
                     <p id="modalUsuarioNombre">Reservado por: {{ Auth::user()->nombres }} {{ Auth::user()->apellidos }}</p>
                     <p id="modalCanchaNombre"></p>
-                    <div class="form-group">
-                        <label for="fechaReserva">Fecha:</label>
-                        <input type="date" name="fechaReserva" id="fechaReserva" class="form-control" required>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="disciplina_id">Disciplinas:</label>
+                            <select name="disciplina_id" id="modalDisciplinaId" class="form-control" required>
+                                <option value="">Seleccione una disciplina</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="fechaReserva">Fecha:</label>
+                            <input type="date" name="fechaReserva" id="fechaReserva" class="form-control" required>
+                        </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="horaInicio">Hora Inicio:</label>
@@ -261,6 +272,17 @@
         var modal = $(this)
         modal.find('#modalCanchaId').val(canchaId)
         modal.find('#modalCanchaNombre').text('Cancha: ' + canchaNombre)
+        
+        var selectDisciplina = modal.find('#modalDisciplinaId');
+        selectDisciplina.empty().append('<option value="">Seleccione una disciplina</option>');
+        $.get('{{ url("admin/reserva/disciplinasPorCancha") }}/' + canchaId, function(data) {
+            if(data.length > 0){
+                data.forEach(function(d){
+                    selectDisciplina.append('<option value="'+ d.id +'">'+ d.nombre +'</option>');
+                });
+            }
+        });
+
     })
 
     //horarios disponibles de la cancha

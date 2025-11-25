@@ -49,13 +49,13 @@ class UserController extends Controller
         ]);
         $numerosAleatorios = substr(str_shuffle("0123456789"), 0, 4);
         $passwordTemporal = $request->nombres . $numerosAleatorios;
-        $apellidosArray = explode(' ', $request->apellidos);
-        $iniciales = '';
-        foreach ($apellidosArray as $apellido) {
-            $iniciales = $iniciales . Str::lower(substr($apellido, 0, 1));
-        }
-        $nombre = Str::lower($request->nombres);
-        $nick = $iniciales . $nombre;
+
+        $vapellidos = explode(' ', $request->apellidos);
+        $paterno = Str::lower($vapellidos[0]);
+        $materno = Str::lower(substr($vapellidos[1], 0, 1));
+        $vnombre = explode(' ', $request->nombres);;
+        $ininombre = Str::lower(substr($vnombre[0], 0, 1));
+        $nick = $ininombre . $paterno . $materno;
 
         $usuario = new User();
         $usuario->name = $nick;
@@ -78,14 +78,12 @@ class UserController extends Controller
                 'user_id' => $usuario->id,
             ]);
         }
-
         //Deportista
         if ($request->rol === 'DEPORTISTA') {
             Deportista::firstOrCreate([
                 'user_id' => $usuario->id,
             ]);
         }
-
         //Controlador
         if ($request->rol === 'CONTROLADOR') {
             Controlador::firstOrCreate([
@@ -130,13 +128,12 @@ class UserController extends Controller
             'celular' => 'required|string|max:20',
             'genero' => 'required|in:Masculino,Femenino',
         ]);
-        $apellidosArray = explode(' ', $request->apellidos);
-        $iniciales = '';
-        foreach ($apellidosArray as $apellido) {
-            $iniciales = $iniciales . Str::lower(substr($apellido, 0, 1));
-        }
-        $nombre = Str::lower($request->nombres);
-        $nick = $iniciales . $nombre;
+        $vapellidos = explode(' ', $request->apellidos);
+        $paterno = Str::lower($vapellidos[0]);
+        $materno = Str::lower(substr($vapellidos[1], 0, 1));
+        $vnombre = explode(' ', $request->nombres);;
+        $ininombre = Str::lower(substr($vnombre[0], 0, 1));
+        $nick = $ininombre . $paterno . $materno;
 
         $usuario->name = $nick;
         $usuario->email = $request->email;
@@ -238,13 +235,12 @@ class UserController extends Controller
             'passwordNuevo' => 'nullable|string|min:8|required_with:passwordActual',
             'passwordConfirmacion' => 'nullable|string|same:passwordNuevo|required_with:passwordNuevo',
         ]);
-        $apellidosArray = explode(' ', $request->apellidos);
-        $iniciales = '';
-        foreach ($apellidosArray as $apellido) {
-            $iniciales = $iniciales . Str::lower(substr($apellido, 0, 1));
-        }
-        $nombre = Str::lower($request->nombres);
-        $nick = $iniciales . $nombre;
+        $vapellidos = explode(' ', $request->apellidos);
+        $paterno = Str::lower($vapellidos[0]);
+        $materno = Str::lower(substr($vapellidos[1], 0, 1));
+        $vnombre = explode(' ', $request->nombres);;
+        $ininombre = Str::lower(substr($vnombre[0], 0, 1));
+        $nick = $ininombre . $paterno . $materno;
 
         // Guardamos los datos del request
         $usuario->name = $nick;
@@ -274,11 +270,9 @@ class UserController extends Controller
         }
         $usuario->save();
 
-
-        return redirect()->back()
+        return redirect()->route('admin.index.home')
         ->with('mensaje', '¡Perfil actualizado correctamente!')
         ->with('icono', 'success');
-
     }
 
 }

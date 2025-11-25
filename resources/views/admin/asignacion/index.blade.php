@@ -30,10 +30,10 @@
                     </div>
                 </div>
                 
-                <div class="card-body" style="background-color: #f0f5e8;">
+                <div class="card-body bg-dark">
                     <div class="table-responsive">
-                        <table id="table1" class="table table-bordered table-striped table-hover table-sm">
-                            <thead>
+                        <table id="table1" class="table table-dark table-bordered table-striped table-hover table-sm">
+                            <thead class="thead-light">
                                 <tr>
                                     <th>Nro</th>
                                     <th>Espacio Deportivo</th>

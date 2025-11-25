@@ -6,6 +6,7 @@ use App\Mail\RegistroReservaMail;
 use App\Models\Cancha;
 use App\Models\CodigoQr;
 use App\Models\Deportista;
+use App\Models\EspacioDeportivo;
 use App\Models\Reserva;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,23 +26,29 @@ class ReservaController extends Controller
         if ($roles->contains('DEPORTISTA')) {
             $reservas = Reserva::with([
                 'deportista.user',
-                'cancha.disciplinaDeportivas'
-            ])->where('deportista_id', $user->deportista->id)->get();
+                'cancha.disciplinaDeportivas',
+                'disciplina'
+            ])->where('deportista_id', $user->deportista->id)
+              ->orderBy('created_at', 'desc')
+              ->get();
         } else {
             $reservas = Reserva::with([
                 'deportista.user',
-                'cancha.disciplinaDeportivas'
-            ])->get();
+                'cancha',
+                'disciplina'
+            ])->orderBy('created_at', 'desc')
+              ->get();
+            // return response()->json($reservas);
         }
         return view('admin.reserva.index', compact('reservas'));
-        // return response()->json($reservas);
     }
 
     public function create()
     {
         $deportistas = Deportista::with('user')->get();
         $canchas = Cancha::with('disciplinaDeportivas')->get();
-        return view('admin.reserva.create', compact('deportistas', 'canchas'));
+        $espacios = EspacioDeportivo::all();
+        return view('admin.reserva.create', compact('deportistas', 'canchas', 'espacios'));
         // return response()->json($canchaDisciplinaDeportivas);
     }
 
@@ -51,6 +58,7 @@ class ReservaController extends Controller
         $request->validate([
             'deportista_id' => 'required|exists:deportistas,id',
             'cancha_id' => 'required|exists:canchas,id',
+            'disciplina_id' => 'required|exists:disciplina_deportivas,id',
             'fechaReserva' => 'required|date',
             'horaInicio' => 'required|date_format:H:i',
             'horaFin' => 'required|date_format:H:i|after:horaInicio',
@@ -59,6 +67,7 @@ class ReservaController extends Controller
         $reserva = new Reserva();
         $reserva->deportista_id = $request->deportista_id;
         $reserva->cancha_id = $request->cancha_id;
+        $reserva->disciplina_deportiva_id = $request->disciplina_id;
         $reserva->fechaReserva = $request->fechaReserva;
         $reserva->horaInicio = $request->horaInicio;
         $reserva->horaFin = $request->horaFin;
@@ -80,7 +89,7 @@ class ReservaController extends Controller
 
         // Mail::to($reserva->deportista->user->email)->send(new RegistroReservaMail($reserva));
 
-        return redirect()->route('admin.reserva.show')
+        return redirect()->route('admin.reserva.index')
         ->with('mensaje', '¡Reserva registrada correctamente! Se ha enviado el código QR de su reserva a su correo electrónico. Por favor, proceda con el pago para confirmar la reserva.')
         ->with('icono', 'success');
     }
@@ -100,7 +109,8 @@ class ReservaController extends Controller
         $reserva = Reserva::find($id);
         $deportistas = Deportista::with('user')->get();
         $canchas = Cancha::with('disciplinaDeportivas')->get();
-        return view('admin.reserva.edit', compact('reserva', 'deportistas', 'canchas'));
+        $espacios = EspacioDeportivo::all(); 
+        return view('admin.reserva.edit', compact('reserva', 'deportistas', 'canchas', 'espacios'));
     }
 
     public function update(Request $request, string $id)
@@ -117,6 +127,7 @@ class ReservaController extends Controller
         $request->validate([
             'deportista_id' => 'required|exists:deportistas,id',
             'cancha_id' => 'required|exists:canchas,id',
+            'disciplina_deportiva_id' => 'required|exists:disciplina_deportivas,id',
             'fechaReserva' => 'required|date',
             'horaInicio' => 'required|date_format:H:i',
             'horaFin' => 'required|date_format:H:i|after:horaInicio',
@@ -124,6 +135,7 @@ class ReservaController extends Controller
         ]);
         $reserva->deportista_id = $request->deportista_id;
         $reserva->cancha_id = $request->cancha_id;
+        $reserva->disciplina_deportiva_id = $request->disciplina_deportiva_id;
         $reserva->fechaReserva = $request->fechaReserva;
         $reserva->horaInicio = $request->horaInicio;
         $reserva->horaFin = $request->horaFin;
@@ -239,6 +251,18 @@ class ReservaController extends Controller
         return redirect()->back()
         ->with('mensaje', 'Reserva cancelada correctamente')
         ->with('icono', 'success');
+    }
+
+    public function getCanchasPorEspacio($id)
+    {
+        $canchas = Cancha::where('espacio_deportivo_id', $id)->get(['id', 'nombre']);
+        return response()->json($canchas);
+    }
+
+    public function getDisciplinasPorCancha($id)
+    {
+        $cancha = Cancha::with('disciplinaDeportivas')->find($id);
+        return response()->json($cancha->disciplinaDeportivas);
     }
 
 }
