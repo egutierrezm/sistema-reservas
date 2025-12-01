@@ -16,7 +16,7 @@ use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $user = Auth::user();
         $roles = $user->roles->pluck('name');
         if($roles->contains('ADMINISTRADOR')){
@@ -100,14 +100,29 @@ class AdminController extends Controller
         }
         if($roles->contains('ADMINISTRADOR DE ESPACIOS')){
             $adminEspacio = $user->administradorEspacio;
+
+            $fechaSeleccionada = $request->query('fecha', now()->toDateString());
+
+            // $espacios = EspacioDeportivo::where('administrador_espacio_id', $adminEspacio->id)
+            //     ->with(['canchas' => function($q) {
+            //         $q->with('reservas');
+            //         $q->with(['controladores' => function($c) {
+            //             $c->wherePivot('fechaAsignacion', '>=', now()->toDateString())
+            //             ->orderByPivot('fechaAsignacion', 'asc');
+            //         }]);
+            //     }])->get();
+
             $espacios = EspacioDeportivo::where('administrador_espacio_id', $adminEspacio->id)
-                ->with(['canchas' => function($q) {
-                    $q->withCount('reservas');
-                    $q->with(['controladores' => function($c) {
-                        $c->wherePivot('fechaAsignacion', '>=', now()->toDateString())
-                        ->orderByPivot('fechaAsignacion', 'asc');
-                    }]);
-                }])->get();
+            ->with(['canchas' => function($q) use ($fechaSeleccionada) {
+                $q->with(['reservas' => function($r) use ($fechaSeleccionada) {
+                    $r->where('fechaReserva', $fechaSeleccionada)
+                      ->whereDoesntHave('cancelacion');
+                }]);
+                $q->with(['controladores' => function($c) use ($fechaSeleccionada) {
+                    $c->wherePivot('fechaAsignacion', $fechaSeleccionada)
+                      ->orderByPivot('turnoAsignado', 'asc');
+                }]);
+            }])->get();
 
             $canchaIds = $espacios->pluck('canchas')->flatten()->pluck('id');
             $totalEspacios = $espacios->count();
@@ -132,7 +147,8 @@ class AdminController extends Controller
                 'totalReservas',
                 'ingresoDia',
                 'ingresoSemana',
-                'controladoresList'
+                'controladoresList',
+                'fechaSeleccionada'
             ));
         }
     }

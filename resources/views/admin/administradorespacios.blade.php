@@ -22,8 +22,6 @@
 @stop
 
 @section('content')
-
-    {{-- Alertas con animación suave --}}
     @if(session('mensaje'))
         <div class="alert alert-{{ session('icono') == 'success' ? 'success' : 'danger' }} alert-dismissible fade show shadow-sm" role="alert">
             <i class="icon fas {{ session('icono') == 'success' ? 'fa-check' : 'fa-ban' }}"></i>
@@ -35,58 +33,64 @@
     @endif
 
     <div class="row">
-        {{-- Contenedor Principal (Izquierdo) --}}
+        {{-- Contenedor Izquierdo --}}
         <div class="col-lg-8 col-12">
-            
-            {{-- Estadísticas (KPIs) con Gradientes y Sombras --}}
+            {{-- Estadísticas --}}
             <div class="row">
                 <div class="col-md-6 col-12">
-                    <div class="small-box bg-gradient-info elevation-2">
+                    <div class="small-box bg-gradient-navy elevation-2">
                         <div class="inner">
                             <h3>{{ $totalEspacios }}</h3>
                             <p>Mis Espacios</p>
                         </div>
-                        <div class="icon"><i class="fas fa-building"></i></div>
-                        <a href="#" class="small-box-footer">Ver detalles <i class="fas fa-arrow-circle-right"></i></a>
+                        <div class="icon"><i class="fas fa-building text-success"></i></div>
+                        <a href="{{ route('admin.espacioDeportivo.index') }}" class="small-box-footer">Ver espacios <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
-                    <div class="small-box bg-gradient-success elevation-2">
+                    <div class="small-box bg-gradient-navy elevation-2">
                         <div class="inner">
                             <h3>{{ $totalCanchas }}</h3>
                             <p>Total Canchas</p>
                         </div>
-                        <div class="icon"><i class="fas fa-futbol"></i></div>
-                        <a href="#" class="small-box-footer">Ver inventario <i class="fas fa-arrow-circle-right"></i></a>
+                        <div class="icon"><i class="fas fa-futbol text-success"></i></div>
+                        <a href="{{ route('admin.cancha.index') }}" class="small-box-footer">Ver canchas <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
-                    <div class="small-box bg-gradient-warning elevation-2">
+                    <div class="small-box bg-gradient-navy elevation-2">
                         <div class="inner">
                             <h3><sup style="font-size: 20px">Bs</sup> {{ number_format($ingresoDia, 2) }}</h3>
                             <p>Ingresos Hoy</p>
                         </div>
-                        <div class="icon"><i class="fas fa-cash-register"></i></div>
+                        <div class="icon"><i class="fas fa-cash-register text-success"></i></div>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
-                    <div class="small-box bg-gradient-light elevation-2">
+                    <div class="small-box bg-gradient-navy elevation-2">
                         <div class="inner">
                             <h3><sup style="font-size: 20px">Bs</sup> {{ number_format($ingresoSemana, 2) }}</h3>
                             <p>Ingresos Semana</p>
                         </div>
-                        <div class="icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="icon"><i class="fas fa-chart-line text-success"></i></div>
                     </div>
                 </div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
                 <h4 class="text-secondary"><i class="fas fa-tasks mr-2"></i> Gestión Operativa</h4>
+                {{-- Selector de fecha --}}
+                <form method="GET" class="form-inline">
+                    <label class="mr-2 font-weight-bold text-secondary">Fecha:</label>
+                    <input type="date" name="fecha" class="form-control form-control-sm mr-2" 
+                        value="{{ $fechaSeleccionada }}">
+                    <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
+                </form>
             </div>
 
-            {{-- Lista de Espacios (Estilo Limpio) --}}
+            {{-- Lista de Espacios --}}
             @foreach($espacios as $espacio)
-                <div class="card card-outline card-success collapsed-card shadow-sm mb-4">
+                <div class="card card-outline card-success shadow-sm mb-4">
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-map-marker-alt mr-2"></i> 
@@ -99,16 +103,15 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="card-body p-0">
                         <div class="table-responsive">
+                            {{-- Tabla simplificada a 2 grandes áreas --}}
                             <table class="table table-striped table-hover m-0">
                                 <thead class="bg-light text-secondary">
                                     <tr>
-                                        <th class="pl-4">Cancha</th>
-                                        <th class="text-center">Actividad</th>
-                                        <th>Controlador Asignado</th>
-                                        <th class="text-center">Acción</th>
+                                        <th class="pl-4" style="width: 25%">Cancha</th>
+                                        <th style="width: 75%">Gestión de Turnos ({{ \Carbon\Carbon::parse($fechaSeleccionada)->format('d/m/Y') }})</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -119,38 +122,73 @@
                                             <br>
                                             <small class="text-muted">
                                                 <i class="far fa-clock"></i>
-                                                 {{ \Carbon\Carbon::parse($espacio->horaApertura)->format('H:i') }} - {{ \Carbon\Carbon::parse($espacio->horaCierre)->format('H:i') }}
-                                                </small>
+                                                    {{ \Carbon\Carbon::parse($espacio->horaApertura)->format('H:i') }} - {{ \Carbon\Carbon::parse($espacio->horaCierre)->format('H:i') }}
+                                            </small>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <span class="badge badge-info" style="font-size: 0.9em">
-                                                {{ $cancha->reservas_count }} Reservas
-                                            </span>
-                                        </td>
-                                        <td class="align-middle">
-                                            @if($cancha->controladores->count() > 0)
-                                                @foreach($cancha->controladores as $controlador)
-                                                    <div class="user-block-sm mb-1">
-                                                        <i class="fas fa-user-circle text-success"></i>
-                                                        <span class="username text-sm text-primary">{{ $controlador->user->nombres }}</span>
-                                                        <span class="description text-xs text-muted">
-                                                            {{ \Carbon\Carbon::parse($controlador->pivot->fechaAsignacion)->format('d/m') }} - {{ $controlador->pivot->turnoAsignado }}
+                                        <td class="align-middle p-2">
+                                            @php
+                                                $turnos = [
+                                                    'Mañana' => ['08:00:00', '12:00:00'],
+                                                    'Tarde'  => ['12:00:00', '18:00:00'],
+                                                    'Noche'  => ['18:00:00', '20:00:00'],
+                                                ];
+                                                $fechaHoy = now()->toDateString();
+                                            @endphp
+                                            <div style="min-width: 450px;">
+                                                @foreach($turnos as $turnoNombre => $rango)
+                                                    @php
+                                                        $reservasDelTurno = [];
+                                                        foreach($cancha->reservas as $reserva) {
+                                                            $horaInicio = \Carbon\Carbon::parse($reserva->horaInicio)->format('H:i:s');
+                                                            if($horaInicio >= $rango[0] && $horaInicio < $rango[1]) {
+                                                                $reservasDelTurno[] = $reserva;
+                                                            }
+                                                        }
+                                                        $asignacion = $cancha->controladores->first(function($ctrl) use ($turnoNombre, $fechaHoy) {
+                                                            return $ctrl->pivot->turnoAsignado === $turnoNombre 
+                                                                && $ctrl->pivot->fechaAsignacion === $fechaHoy;
+                                                        });
+                                                    @endphp
+
+                                                    <div class="d-flex align-items-center {{ !$loop->last ? 'border-bottom' : '' }} py-1">
+                                                        <span class="text-xs font-weight-bold text-uppercase text-secondary mr-2" style="width: 60px;">
+                                                            {{ $turnoNombre }}
                                                         </span>
+                                                        <div class="mr-3" style="width: 180px;">
+                                                            @if($asignacion)
+                                                                <div class="d-flex align-items-center bg-light rounded px-2 py-1 border" style="max-width: 100%;">
+                                                                    <i class="fas fa-user-check text-success mr-2 text-xs"></i>
+                                                                    <span class="text-xs font-weight-bold" title="{{ $asignacion->user->nombres }}">
+                                                                        {{ $asignacion->user->nombres }} {{ $asignacion->user->apellidos }}
+                                                                    </span>
+                                                                </div>
+                                                            @else
+                                                                <button type="button" 
+                                                                        class="btn btn-outline-primary btn-xs btn-block"
+                                                                        style="font-size: 0.75rem;"
+                                                                        data-toggle="modal" 
+                                                                        data-target="#modalAsignar"
+                                                                        data-cancha-id="{{ $cancha->id }}"
+                                                                        data-cancha-nombre="{{ $cancha->nombre }}"
+                                                                        data-turno="{{ $turnoNombre }}">
+                                                                    <i class="fas fa-plus mr-1"></i> Asignar
+                                                                </button>
+                                                            @endif
+                                                        </div>
+                                                        <div class="d-flex flex-wrap align-items-center flex-grow-1">
+                                                            @if(count($reservasDelTurno) > 0)
+                                                                @foreach($reservasDelTurno as $reserva)
+                                                                    <span class="badge {{ $reserva->estado == 'Finalizada' ? 'badge-danger' : 'badge-info' }} mr-1" style="font-size: 0.85em; font-weight: normal;">
+                                                                        {{ \Carbon\Carbon::parse($reserva->horaInicio)->format('H:i') }}-{{ \Carbon\Carbon::parse($reserva->horaFin)->format('H:i') }}
+                                                                    </span>
+                                                                @endforeach
+                                                            @else
+                                                                <span class="badge badge-light border text-muted" style="font-size: 0.75em;">Sin reservas</span>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 @endforeach
-                                            @else
-                                                <span class="badge badge-secondary font-weight-normal px-2 py-1">Sin asignar</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <button type="button" 
-                                                    class="btn btn-outline-success btn-sm rounded-pill font-weight-bold px-3 shadow-sm"
-                                                    data-toggle="modal" 
-                                                    data-target="#modalAsignar"
-                                                    data-cancha-id="{{ $cancha->id }}"
-                                                    data-cancha-nombre="{{ $cancha->nombre }}">
-                                                <i class="fas fa-plus mr-1"></i> Asignar
-                                            </button>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -164,7 +202,6 @@
 
         {{-- Contenedor Derecho (Widgets) --}}
         <div class="col-lg-4 col-12">
-            
             {{-- Tarjeta de Información --}}
             <div class="card card-outline card-warning shadow-sm">
                 <div class="card-header">
@@ -306,21 +343,18 @@
 
 @section('css')
 <style>
-    /* Pequeños ajustes CSS extra */
     .card { border-radius: 8px; border: none; }
     .small-box { border-radius: 8px; }
     .modal-content { border-radius: 12px; }
     .input-group-text { border: 1px solid #ced4da; background-color: #f8f9fa; }
     .btn-rounded-pill { border-radius: 50px; }
-    
-    /* Hover effect en tabla */
     .table-hover tbody tr:hover {
         background-color: rgba(0,0,0,.03);
     }
 </style>
 @stop
 
-@section('js')
+{{-- @section('js')
 <script>
     $('#modalAsignar').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
@@ -330,6 +364,30 @@
         var modal = $(this);
         modal.find('#modal_cancha_id').val(id);
         modal.find('#modal_cancha_nombre').val(nombre);
+    });
+</script>
+@stop --}}
+
+@section('js')
+<script>
+    $('#modalAsignar').on('show.bs.modal', function (event) {
+        // 1. Obtener el botón que disparó el modal
+        var button = $(event.relatedTarget);
+        
+        // 2. Extraer datos del botón
+        var id = button.data('cancha-id');
+        var nombre = button.data('cancha-nombre');
+        var turno = button.data('turno'); // <--- NUEVO DATO
+
+        // 3. Rellenar el modal
+        var modal = $(this);
+        modal.find('#modal_cancha_id').val(id);
+        modal.find('#modal_cancha_nombre').val(nombre);
+        
+        // 4. Seleccionar automáticamente el turno en el combo box
+        if(turno){
+            modal.find('select[name="turnoAsignado"]').val(turno);
+        }
     });
 </script>
 @stop
