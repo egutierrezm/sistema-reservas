@@ -76,9 +76,6 @@ class AdminController extends Controller
             $espacios = EspacioDeportivo::all();
             return view('admin.deportistaespacios', compact('espacios'));
         }
-        if($roles->contains('ADMINISTRADOR DE ESPACIOS')){
-            return view('admin.administradorespacios');
-        }
         if($roles->contains('CONTROLADOR')){
             $controlador = Controlador::where('user_id', Auth::id())->first();
             $asignaciones = CanchaControlador::where('controlador_id', $controlador->id)->get();
@@ -100,6 +97,43 @@ class AdminController extends Controller
                 $reservas = $reservas->merge($reservasTurno);
             }
             return view('admin.controladorcanchas', compact('reservas'));
+        }
+        if($roles->contains('ADMINISTRADOR DE ESPACIOS')){
+            $adminEspacio = $user->administradorEspacio;
+            $espacios = EspacioDeportivo::where('administrador_espacio_id', $adminEspacio->id)
+                ->with(['canchas' => function($q) {
+                    $q->withCount('reservas');
+                    $q->with(['controladores' => function($c) {
+                        $c->wherePivot('fechaAsignacion', '>=', now()->toDateString())
+                        ->orderByPivot('fechaAsignacion', 'asc');
+                    }]);
+                }])->get();
+
+            $canchaIds = $espacios->pluck('canchas')->flatten()->pluck('id');
+            $totalEspacios = $espacios->count();
+            $totalCanchas = $espacios->pluck('canchas')->flatten()->count();
+            $totalReservas = $espacios->sum(function($espacio) {
+                return $espacio->canchas->sum('reservas_count');
+            });
+            $pagosQuery = Pago::whereHas('reserva', function($q) use ($canchaIds) {
+                $q->whereIn('cancha_id', $canchaIds);
+            });
+
+            $ingresoDia = (clone $pagosQuery)->whereDate('fechaPago', today())->sum('monto');
+            $inicioSemana = now()->startOfWeek();
+            $finSemana = now()->endOfWeek();
+            $ingresoSemana = (clone $pagosQuery)->whereBetween('fechaPago', [$inicioSemana, $finSemana])->sum('monto');
+            $controladoresList = Controlador::with('user')->get();
+
+            return view('admin.administradorespacios', compact(
+                'espacios',
+                'totalEspacios',
+                'totalCanchas',
+                'totalReservas',
+                'ingresoDia',
+                'ingresoSemana',
+                'controladoresList'
+            ));
         }
     }
 

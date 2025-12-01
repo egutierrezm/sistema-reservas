@@ -82,6 +82,7 @@
                                  {{ \Carbon\Carbon::parse($reserva->horaFin)->format('H:i') }})
                             </h5>
                             <div>
+
                                 @if($reserva->estaPagada())
                                     <span class="badge badge-success">Reserva Pagada</span>
                                 @else
@@ -89,6 +90,20 @@
                                         <i class="fas fa-money-bill-wave"></i> Reserva pendiente de pago
                                     </a>
                                 @endif
+
+                                @if($reserva->estado !== 'Finalizada' && $reserva->estado !== 'Cancelada')
+                                    <form action="{{ route('admin.reserva.finalizarReserva', $reserva->id) }}" 
+                                        method="POST" style="display:inline-block;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('¿Confirmas que la reserva ha finalizado y deseas liberar la cancha?');">
+                                            <i class="fas fa-flag-checkered"></i> Finalizar Reserva
+                                        </button>
+                                    </form>
+                                @elseif($reserva->estado === 'Finalizada')
+                                    <span class="badge badge-primary">Reserva Finalizada</span>
+                                @endif
+
                             </div>
                         </div>
                         <div class="card-body text-white">

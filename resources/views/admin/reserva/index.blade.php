@@ -81,6 +81,8 @@
                                                     <span class="badge badge-success">{{ $reserva->estado }}</span>
                                                 @elseif($reserva->estado == 'Cancelada')
                                                     <span class="badge badge-danger">{{ $reserva->estado }}</span>
+                                                @elseif($reserva->estado == 'Finalizada')
+                                                    <span class="badge badge-light">{{ $reserva->estado }}</span>
                                                 @endif
                                             </td>
                                             <td class="align-middle">

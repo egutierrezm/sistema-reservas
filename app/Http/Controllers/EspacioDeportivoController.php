@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdministradorEspacio;
 use App\Models\EspacioDeportivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class EspacioDeportivoController extends Controller
@@ -14,7 +15,15 @@ class EspacioDeportivoController extends Controller
     {
         // $espacioDeportivos = EspacioDeportivo::all();
         // return response()->json($espacioDeportivos);
-        $espacioDeportivos = EspacioDeportivo::with('administradorEspacio.user')->get();
+        $user = Auth::user();
+        $roles = $user->roles->pluck('name');
+        if ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
+            $espacioDeportivos = $user->administradorEspacio->espaciosDeportivos()
+                                      ->with('administradorEspacio.user')
+                                      ->get();
+        } else {
+            $espacioDeportivos = EspacioDeportivo::with('administradorEspacio.user')->get();
+        }
         return view('admin.espacioDeportivo.index', compact('espacioDeportivos'));
     }
 

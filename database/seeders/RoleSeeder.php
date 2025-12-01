@@ -83,6 +83,10 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'admin.reserva.destroy'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.reserva.disponibilidad'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.reserva.cancelarReserva'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.reserva.canchasPorEspacio'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.reserva.disciplinasPorCancha'])->syncRoles($superAdmin);
+        Permission::create(['name' => 'admin.reserva.finalizarReserva'])->syncRoles($superAdmin);
+
         //Pago
         Permission::create(['name' => 'admin.pago.index'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.pago.create'])->syncRoles($superAdmin);
@@ -120,6 +124,8 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'admin.valoracion.canchasPorEspacio'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.valoracion.comentarioPorCancha'])->syncRoles($superAdmin);
         Permission::create(['name' => 'admin.valoracion.getValoracionPorCancha'])->syncRoles($superAdmin);
-
+        
+        //Invitacion
+        Permission::create(['name' => 'admin.invitacion.index'])->syncRoles($superAdmin);
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\CanchaController;
 use App\Http\Controllers\CodigoQrController;
 use App\Http\Controllers\ControladorController;
 use App\Http\Controllers\DeportistaController;
+use App\Http\Controllers\DeportistaReservaController;
 use App\Http\Controllers\DisciplinaDeportivaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -111,6 +112,7 @@ Route::get('/admin/reserva/disponibilidad', [ReservaController::class, 'disponib
 Route::post('/admin/reserva/cancelarReserva/{id}', [ReservaController::class, 'cancelarReserva'])->name('admin.reserva.cancelarReserva')->middleware('auth');
 Route::get('/admin/reserva/canchasPorEspacio/{id}', [ReservaController::class, 'getCanchasPorEspacio'])->name('admin.reserva.canchasPorEspacio')->middleware('auth');
 Route::get('admin/reserva/disciplinasPorCancha/{id}', [ReservaController::class, 'getDisciplinasPorCancha'])->name('admin.reserva.disciplinasPorCancha')->middleware('auth');
+Route::post('/admin/reserva/finalizarReserva/{id}', [ReservaController::class, 'finalizarReserva'])->name('admin.reserva.finalizarReserva')->middleware('auth');
 
 // Rutas para pagos
 Route::get('/admin/pago', [PagoController::class, 'index'])->name('admin.pago.index')->middleware('auth');
@@ -157,3 +159,6 @@ Route::get('/admin/valoracion/canchasPorEspacio/{id}', [ValoracionController::cl
 Route::get('/admin/valoracion/comentariosPorCancha/{id}', [ValoracionController::class, 'getComentariosPorCancha'])->name('admin.valoracion.comentarioPorCancha')->middleware('auth');
 Route::get('/admin/valoracion/getValoracionPorCancha/{id}', [ValoracionController::class, 'getValoracionPorCancha'])->name('admin.valoracion.getValoracionPorCancha')->middleware('auth');
 
+// Rutas para las invitaciones
+Route::get('admin/invitacion', [DeportistaReservaController::class,'index'])->name('admin.invitacion.index')->middleware('auth');
+Route::get('/qr/acceso', [DeportistaReservaController::class, 'qrAcceso'])->name('qr.acceso');

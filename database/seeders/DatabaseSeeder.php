@@ -71,6 +71,7 @@ class DatabaseSeeder extends Seeder
             'foto' => 'PRY2h1oziUKanC9Rgy9lql4XFR744PCLVtTHKxCT.jpg',
             'estado' => true
         ])->assignRole('DEPORTISTA');
+        
         Deportista::firstOrCreate(['user_id' => $userdep1->id]);
         $userdep2 = User::create([
             'name' => 'abritod',
@@ -132,6 +133,22 @@ class DatabaseSeeder extends Seeder
             'estado' => true
         ])->assignRole('DEPORTISTA');
         Deportista::firstOrCreate(['user_id' => $userdep5->id]);
+
+        $userdep6 = User::create([
+            'name' => 'jossjugador',
+            'email' => 'jossjugador@gmail.com',
+            'password' => Hash::make('J123456R'),
+            'tipoDocumento' => 'CI',
+            'nroDocumento' => '12345678',
+            'nombres' => 'Jose Luis',
+            'apellidos' => 'Zeballos Abasto',
+            'fechaNaci' => '1995-11-02',
+            'celular' => '61122336',
+            'genero' => 'Masculino',
+            'foto' => null,
+            'estado' => true
+        ])->assignRole('DEPORTISTA');
+        Deportista::firstOrCreate(['user_id' => $userdep6->id]);
         
         // Seed para Administrador de Espacios + Espacio Deportivo
         $useradmin1 = User::create([
@@ -179,6 +196,22 @@ class DatabaseSeeder extends Seeder
             'estado' => true
         ])->assignRole('ADMINISTRADOR DE ESPACIOS');
         AdministradorEspacio::firstOrCreate(['user_id' => $useradmin3->id]);
+        
+        $useradmin4 = User::create([
+            'name' => 'jossadmed',
+            'email' => 'jossadmed@gmail.com',
+            'password' => Hash::make('J123456A'),
+            'tipoDocumento' => 'CI',
+            'nroDocumento' => '11122233',
+            'nombres' => 'Reynaldo',
+            'apellidos' => 'Zeballos Torrez',
+            'fechaNaci' => '1995-04-13',
+            'celular' => '66677788',
+            'genero' => 'Masculino',
+            'foto' => null,
+            'estado' => true
+        ])->assignRole('ADMINISTRADOR DE ESPACIOS');
+        AdministradorEspacio::firstOrCreate(['user_id' => $useradmin4->id]);
 
         $espdep1 = EspacioDeportivo::create([
             'nombre' => 'Espacio Deportivo Guido Loayza',

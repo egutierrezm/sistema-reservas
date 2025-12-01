@@ -40,32 +40,26 @@ class PagoController extends Controller
     public function store(Request $request, string $id)
     {
         $reserva = Reserva::find($id);
+        $totalPagado = $reserva->pagos()->sum('monto');
+        $precioTotal = $reserva->cancha->precioxhora;
 
         $request->validate([
             'monto' => 'required|numeric|min:0.01',
             'metodo' => 'required|string|max:50',
             'fechaPago' => 'required|date',
         ]);
+        $pago = new Pago();
+        $pago->reserva_id = $reserva->id;
+        $pago->monto = $request->monto;
+        $pago->metodo = $request->metodo;
+        $pago->fechaPago = $request->fechaPago;
+        $pago->save();
 
-        Pago::create([
-            'reserva_id' => $reserva->id,
-            'monto' => $request->monto,
-            'metodo' => $request->metodo,
-            'fechaPago' => $request->fechaPago,
-        ]);
-
-        // ✅ Actualizar estado automáticamente (opcional)
-        $totalPagado = $reserva->pagos()->sum('monto') + $request->monto;
-        $precioTotal = $reserva->cancha->precioxhora;
-
+        $totalPagado = $totalPagado + $request->monto;
         if ($totalPagado >= $precioTotal) {
-            $reserva->estado = 'Confirmada'; // ✅ Totalmente pagada
-        } elseif ($totalPagado > 0) {
-            $reserva->estado = 'Pendiente'; // ✅ Parcialmente pagada, pero seguimos usando Pendiente
-        } else {
-            $reserva->estado = 'Pendiente'; // ✅ Sin pagos
+            $reserva->estado = 'Confirmada';
+            $reserva->save();
         }
-        $reserva->save();
 
         return redirect()->route('admin.reserva.show', $reserva->id)
         ->with('mensaje', 'Pago registrado correctamente')

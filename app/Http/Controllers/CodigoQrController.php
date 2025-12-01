@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CodigoQr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
 class CodigoQrController extends Controller

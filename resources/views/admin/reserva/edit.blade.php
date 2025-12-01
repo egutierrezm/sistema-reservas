@@ -163,6 +163,7 @@
                                         <option value="Pendiente" {{ old('estado', $reserva->estado) == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
                                         <option value="Confirmada" {{ old('estado', $reserva->estado) == 'Confirmada' ? 'selected' : '' }}>Confirmada</option>
                                         <option value="Cancelada" {{ old('estado', $reserva->estado) == 'Cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                        <option value="Finalizada" {{ old('estado', $reserva->estado) == 'Finalizada' ? 'selected' : '' }}>Finalizada</option>
                                     </select>
                                 </div>
                                 @error('estado')

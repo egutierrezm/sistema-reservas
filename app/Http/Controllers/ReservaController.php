@@ -31,6 +31,16 @@ class ReservaController extends Controller
             ])->where('deportista_id', $user->deportista->id)
               ->orderBy('created_at', 'desc')
               ->get();
+        } elseif ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
+            $espaciosIds = $user->administradorEspacio->espaciosDeportivos->pluck('id');
+            $reservas = Reserva::with([
+                'deportista.user',
+                'cancha.espacioDeportivo',
+                'disciplina'
+            ])->whereHas('cancha', function($query) use ($espaciosIds) {
+                $query->whereIn('espacio_deportivo_id', $espaciosIds);
+            })->orderBy('created_at', 'desc')->get();
+            
         } else {
             $reservas = Reserva::with([
                 'deportista.user',
@@ -62,7 +72,7 @@ class ReservaController extends Controller
             'fechaReserva' => 'required|date',
             'horaInicio' => 'required|date_format:H:i',
             'horaFin' => 'required|date_format:H:i|after:horaInicio',
-            'estado' => 'required|string|in:Pendiente,Confirmada,Cancelada',
+            'estado' => 'required|string|in:Pendiente,Confirmada,Cancelada,Finalizada',
         ]);
         $reserva = new Reserva();
         $reserva->deportista_id = $request->deportista_id;
@@ -75,7 +85,7 @@ class ReservaController extends Controller
         $reserva->save();
 
         // Generar codigo QR de la reserva
-        $urlRegistro = route('register', ['reserva' => $reserva->id]);
+        $urlRegistro = route('qr.acceso', ['reserva' => $reserva->id]);
         $qr = QrCode::format('svg')->size(250)->generate($urlRegistro);
         $nombreArchivo = 'qrs/QR_' . $reserva->id . '_' . Str::random(6) . '.svg';
         Storage::disk('public')->put($nombreArchivo, $qr);
@@ -131,7 +141,7 @@ class ReservaController extends Controller
             'fechaReserva' => 'required|date',
             'horaInicio' => 'required|date_format:H:i',
             'horaFin' => 'required|date_format:H:i|after:horaInicio',
-            'estado' => 'required|string|in:Pendiente,Confirmada,Cancelada',
+            'estado' => 'required|string|in:Pendiente,Confirmada,Cancelada,Finalizada',
         ]);
         $reserva->deportista_id = $request->deportista_id;
         $reserva->cancha_id = $request->cancha_id;
@@ -151,7 +161,7 @@ class ReservaController extends Controller
             $codigoqr->codigo = 'QR' . $reserva->id . Str::random(6);
         }
 
-        $urlRegistro = route('register', ['reserva' => $reserva->id]);
+        $urlRegistro = route('qr.acceso', ['reserva' => $reserva->id]);
         $qr = QrCode::format('svg')->size(250)->generate($urlRegistro);
         $nombreArchivo = 'qrs/QR_' . $reserva->id . '_' . Str::random(6) . '.svg';
         Storage::disk('public')->put($nombreArchivo, $qr);
@@ -196,7 +206,7 @@ class ReservaController extends Controller
         
         $reservas = Reserva::where('cancha_id', $request->cancha_id)
             ->where('fechaReserva', $request->fecha)
-            ->where('estado', '!=', 'Cancelada') // <--- agregar esta línea
+            ->whereNotIn('estado', ['Cancelada', 'Finalizada'])
             ->when($request->filled('reserva_id'), function ($query) use ($request) {
             $query->where('id', '!=', $request->reserva_id);
         })->get(['horaInicio', 'horaFin']);
@@ -263,6 +273,30 @@ class ReservaController extends Controller
     {
         $cancha = Cancha::with('disciplinaDeportivas')->find($id);
         return response()->json($cancha->disciplinaDeportivas);
+    }
+
+    public function finalizarReserva($id)
+    {
+        $reserva = Reserva::with('codigoQr')->findOrFail($id);
+        if ($reserva->estado === 'Cancelada') {
+            return back()->with('mensaje', 'No se puede finalizar una reserva cancelada')
+                        ->with('icono', 'error');
+        }
+
+        if ($reserva->estado === 'Finalizada') {
+            return back()->with('mensaje', 'La reserva ya está finalizada')
+                        ->with('icono', 'warning');
+        }
+        $reserva->estado = 'Finalizada';
+        $reserva->save();
+        // Inactivar código QR
+        if ($reserva->codigoQr) {
+            $reserva->codigoQr->estado = 'expirado';
+            $reserva->codigoQr->save();
+        }
+
+        return back()->with('mensaje', 'Reserva finalizada y cancha liberada correctamente')
+                    ->with('icono', 'success');
     }
 
 }

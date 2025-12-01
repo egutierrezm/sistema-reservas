@@ -912,7 +912,7 @@
             </div>
         </div>
     </section>
-    <section class="cta">
+    <section id="about" class="cta">
         <div class="cta-background" style="background-image: url('https://images.unsplash.com/photo-1758535013088-20f84ac4c645?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1374')">
         </div>
         <div class="cta-overlay"></div>
@@ -930,7 +930,7 @@
         </div>
     </section>
 
-    <footer class="footer">
+    <footer id="contact" class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">

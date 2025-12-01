@@ -429,6 +429,14 @@ return [
             'active' => ['admin/valoracion*'],
         ],
         [
+            'can' => 'admin.invitacion.index',
+            'text' => 'Mis invitaciones',
+            'url' => 'admin/invitacion',
+            'icon' => 'fas fa-fw fa-envelope-open-text',
+            'classes' => 'bg-lime text-white',
+            'active' => ['admin/invitacion*'],
+        ],
+        [
             'can' => 'admin.ajuste.index',
             'header' => 'Ajustes del Sistema',
         ],

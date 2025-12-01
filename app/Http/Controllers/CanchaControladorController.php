@@ -47,7 +47,7 @@ class CanchaControladorController extends Controller
         $asignacion->turnoAsignado = $request->turnoAsignado;
         $asignacion->save();
 
-        return redirect()->route('admin.asignacion.index')
+        return redirect()->back()
             ->with('mensaje', '¡Asignación registrada correctamente!')
             ->with('icono', 'success');
     }

@@ -21,6 +21,14 @@ class ValoracionController extends Controller
                 'deportista.user',
                 'cancha'
             ])->orderByDesc('created_at')->where('deportista_id', $user->deportista->id)->get();
+        } elseif ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
+            $espaciosIds = $user->administradorEspacio->espaciosDeportivos->pluck('id');
+            $valoraciones = Valoracion::with([
+                'deportista.user',
+                'cancha.espacioDeportivo'
+            ])->whereHas('cancha', function($query) use ($espaciosIds) {
+                $query->whereIn('espacio_deportivo_id', $espaciosIds);
+            })->orderByDesc('created_at')->get();
         }else{
             $valoraciones = Valoracion::with([
                 'deportista.user',

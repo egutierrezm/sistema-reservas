@@ -77,7 +77,9 @@
                             <span class="input-group-text bg-light"><i class="fas fa-money-bill-wave text-dark"></i></span>
                             <input type="number" step="0.01" min="0.01" name="monto" id="monto" class="form-control"
                                 value="{{ old('monto') }}" placeholder="Ingrese el monto"
-                                {{ $saldo <= 0 ? 'disabled' : 'required' }}>
+                                {{ $saldo <= 0 ? 'disabled' : 'required' }}
+                                data-saldo="{{ $saldo }}">
+                            <small id="errorMonto" class="text-warning d-none"></small>
                         </div>
                         @error('monto')
                             <small class="text-danger">{{ $message }}</small>
@@ -91,10 +93,16 @@
                             <select name="metodo" id="metodo" class="form-control"
                                 {{ $saldo <= 0 ? 'disabled' : 'required' }}>
                                 <option value="">Seleccione una opción</option>
-                                <option value="Efectivo" {{ old('metodo') == 'Efectivo' ? 'selected' : '' }}>Efectivo</option>
+                                {{-- <option value="Efectivo" {{ old('metodo') == 'Efectivo' ? 'selected' : '' }}>Efectivo</option> --}}
                                 <option value="Transferencia" {{ old('metodo') == 'Transferencia' ? 'selected' : '' }}>Transferencia</option>
                                 <option value="Tarjeta" {{ old('metodo') == 'Tarjeta' ? 'selected' : '' }}>Tarjeta</option>
+                                @if(!auth()->user()->getRoleNames()->contains('DEPORTISTA'))
+                                    <option value="Efectivo" {{ old('metodo') == 'Efectivo' ? 'selected' : '' }}>Efectivo</option>
+                                @endif
                             </select>
+                            <small id="mensajeEfectivo" class="text-warning d-none">
+                                El pago en efectivo debe realizarse personalmente en la cancha.
+                            </small>
                         </div>
                         @error('metodo')
                             <small class="text-danger">{{ $message }}</small>
@@ -116,12 +124,12 @@
 
                     <hr class="bg-light">
                     <div class="text-end">
-                        <a href="{{ route('admin.reserva.index', $reserva->id) }}" class="btn btn-outline-light me-2">
+                        <a href="{{ route('admin.reserva.index', $reserva->id) }}" class="btn btn-light me-2">
                             <i class="fas fa-arrow-left"></i> Regresar
                         </a>
 
                         @if ($saldo > 0)
-                            <button type="submit" class="btn btn-light text-dark">
+                            <button type="submit" class="btn btn-success">
                                 <i class="fas fa-save"></i> Guardar pago
                             </button>
                         @else
@@ -137,6 +145,28 @@
     </div>
 </div>
 
+{{-- Modal simulador de pago --}}
+<div class="modal fade" id="modalTarjeta" tabindex="-1" aria-labelledby="modalTarjetaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTarjetaLabel">
+          <i class="fas fa-spinner fa-spin me-2"></i> Procesando pago...
+        </h5>
+      </div>
+      <div class="modal-body text-center">
+        <div class="progress mb-2">
+          <div id="barraProgreso" class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+               role="progressbar" style="width: 0%"></div>
+        </div>
+        <div id="mensajeProceso" class="mb-2"><i class="fas fa-info-circle me-1"></i> Iniciando transacción...</div>
+        <div id="mensajeFinal" class="d-none">
+          <i class="fas fa-check-circle text-success me-1"></i> ¡Tarjeta procesada!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @stop
 
 @section('css')
@@ -154,7 +184,106 @@
 @stop
 
 @section('js')
+
 <script>
-    console.log("Vista de registro de pagos cargada correctamente");
+console.log("Vista de registro de pagos cargada correctamente");
+
+document.addEventListener('DOMContentLoaded', function() {
+    const inputMonto = document.getElementById('monto');
+    const errorMonto = document.getElementById('errorMonto');
+    const saldo = parseFloat(inputMonto.dataset.saldo);
+
+    const form = inputMonto.closest('form');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    inputMonto.addEventListener('input', function() {
+        const valor = parseFloat(this.value);
+
+        if (valor > saldo) {
+            errorMonto.textContent = `El monto no puede ser mayor al saldo pendiente (Bs. ${saldo.toFixed(2)}).`;
+            errorMonto.classList.remove('d-none');
+            this.classList.add('is-invalid');
+            submitBtn.disabled = true;
+        } else {
+            errorMonto.textContent = '';
+            errorMonto.classList.add('d-none');
+            this.classList.remove('is-invalid');
+            submitBtn.disabled = false;
+        }
+    });
+
+    form.addEventListener('submit', function(e) {
+        const valor = parseFloat(inputMonto.value);
+        if (valor > saldo) {
+            e.preventDefault();
+            inputMonto.focus();
+            alert(`El monto ingresado no puede ser mayor al saldo pendiente (Bs. ${saldo.toFixed(2)}).`);
+        }
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const metodoPago = document.getElementById('metodo');
+    const mensajeEfectivo = document.getElementById('mensajeEfectivo');
+    const saldo = parseFloat(document.getElementById('monto').dataset.saldo);
+    const esDeportista = @json(auth()->user()->getRoleNames()->contains('DEPORTISTA'));
+
+    metodoPago.addEventListener('change', function() {
+        if (this.value === 'Efectivo' && esDeportista) {
+            mensajeEfectivo.textContent = 'Debe pasar a pagar personalmente el efectivo en la cancha.';
+            mensajeEfectivo.classList.remove('d-none');
+        } else {
+            mensajeEfectivo.textContent = '';
+            mensajeEfectivo.classList.add('d-none');
+        }
+    });
+});
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const metodoSelect = document.getElementById('metodo');
+    const form = metodoSelect.closest('form');
+    const modalTarjeta = new bootstrap.Modal(document.getElementById('modalTarjeta'));
+    const barraProgreso = document.getElementById('barraProgreso');
+    const mensajeFinal = document.getElementById('mensajeFinal');
+    const mensajeProceso = document.getElementById('mensajeProceso');
+    const mensajes = [
+        "<i class='fas fa-lock me-1'></i> Verificando seguridad",
+        "<i class='fas fa-credit-card me-1'></i> Autorizando tarjeta",
+        "<i class='fas fa-university me-1'></i> Conectando con el banco",
+        "<i class='fas fa-file-alt me-1'></i> Validando datos",
+        "<i class='fas fa-cogs me-1'></i> Procesando pago"
+    ];
+    form.addEventListener('submit', function(e) {
+        if(metodoSelect.value === 'Tarjeta') {
+            e.preventDefault();
+            barraProgreso.style.width = '0%';
+            mensajeFinal.classList.add('d-none');
+            mensajeProceso.innerHTML = "<i class='fas fa-info-circle me-1'></i> Iniciando transacción...";
+            modalTarjeta.show();
+
+            let progreso = 0;
+            let mensajeIndex = 0;
+            const intervalo = setInterval(() => {
+                progreso += 5;
+                barraProgreso.style.width = progreso + '%';
+                if(progreso % 20 === 0 && mensajeIndex < mensajes.length) {
+                    mensajeProceso.innerHTML = mensajes[mensajeIndex];
+                    mensajeIndex++;
+                }
+                if(progreso >= 100){
+                    clearInterval(intervalo);
+                    mensajeProceso.classList.add('d-none');
+                    mensajeFinal.classList.remove('d-none');
+                    setTimeout(() => form.submit(), 1000);
+                }
+            }, 450);
+        }
+    });
+});
 </script>
 @stop

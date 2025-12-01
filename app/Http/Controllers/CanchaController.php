@@ -6,6 +6,7 @@ use App\Models\Cancha;
 use App\Models\DisciplinaDeportiva;
 use App\Models\EspacioDeportivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CanchaController extends Controller
@@ -15,7 +16,16 @@ class CanchaController extends Controller
     {
         // $canchas = Cancha::all();
         // return response()->json($canchas);
-        $canchas = Cancha::with(['espacioDeportivo', 'disciplinaDeportivas'])->get();
+        $user = Auth::user();
+        $roles = $user->roles->pluck('name');
+        if ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
+            $espaciosIds = $user->administradorEspacio->espaciosDeportivos->pluck('id');
+            $canchas = Cancha::with(['espacioDeportivo', 'disciplinaDeportivas'])
+                             ->whereIn('espacio_deportivo_id', $espaciosIds)
+                             ->get();
+        } else {
+            $canchas = Cancha::with(['espacioDeportivo', 'disciplinaDeportivas'])->get();
+        }
         return view('admin.cancha.index', compact('canchas'));
     }
 

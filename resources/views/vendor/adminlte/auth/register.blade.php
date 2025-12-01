@@ -18,15 +18,13 @@
 @section('auth_body')
     <form action="{{ $registerUrl }}" method="post">
         @csrf
-        {{-- Reserva oculta si viene en la URL --}}
-        @if(request()->has('reserva'))
-            <input type="hidden" name="reserva_id" value="{{ request()->get('reserva') }}">
-        @endif
+
+        <input type="hidden" name="reserva_id" value="{{ request()->get('reserva') ?? session('reserva_id') }}">
 
         {{-- Apellidos --}}
         <div class="input-group mb-3">
             <input type="text" name="apellidos" class="form-control @error('apellidos') is-invalid @enderror"
-                value="{{ old('apellidos') }}" placeholder="Apellidos">
+                value="{{ old('apellidos') }}" placeholder="Apellidos" autofocus>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -42,7 +40,7 @@
         {{-- Nombres --}}
         <div class="input-group mb-3">
             <input type="text" name="nombres" class="form-control @error('nombres') is-invalid @enderror"
-                value="{{ old('nombres') }}" placeholder="Nombres" autofocus>
+                value="{{ old('nombres') }}" placeholder="Nombres">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>

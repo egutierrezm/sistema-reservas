@@ -177,6 +177,7 @@
                                                 <option value="Pendiente" {{ old('estado') == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
                                                 <option value="Confirmada" {{ old('estado') == 'Confirmada' ? 'selected' : '' }}>Confirmada</option>
                                                 <option value="Cancelada" {{ old('estado') == 'Cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                                <option value="Finalizada" {{ old('estado') == 'Finalizada' ? 'selected' : '' }}>Finalizada</option>
                                             </select>
                                         </div>
                                         @error('estado')

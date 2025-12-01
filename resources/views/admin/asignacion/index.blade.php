@@ -122,7 +122,7 @@
     $(function(){
         $("#table1").DataTable({
             "pageLength": 5,
-            "ordering": false,
+            "ordering": true,
             "language": {
                 "emptyTable": "No hay información",
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ Asignaciones",

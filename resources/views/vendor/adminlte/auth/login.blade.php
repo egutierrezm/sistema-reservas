@@ -20,11 +20,14 @@
     }
 @endphp
 
+
 @section('auth_header', __('adminlte::adminlte.login_message'))
 
 @section('auth_body')
     <form action="{{ $loginUrl }}" method="post">
         @csrf
+
+        <input type="hidden" name="reserva_id" value="{{ session('reserva_id') }}">
 
         {{-- Email field --}}
         <div class="input-group mb-3">
