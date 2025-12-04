@@ -10,7 +10,7 @@ class AdministradorEspacioController extends Controller
 
     public function index()
     {
-        $administradores = AdministradorEspacio::with('user')->get();
+        $administradores = AdministradorEspacio::with('user')->orderBy('id', 'desc')->get();
         // return response()->json($administradores);
         return view('admin.administradorEspacio.index', compact('administradores'));
     }

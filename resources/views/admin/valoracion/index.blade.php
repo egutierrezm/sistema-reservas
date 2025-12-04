@@ -23,8 +23,18 @@
             <div class="card card-outline card-navy">
                 <div class="card-header" style="background-color: #CCF3EA;">
                     <h3 class="card-title"><b>Valoraciones Registradas</b></h3>
+                    @php
+                        $user = Auth::user();
+                        $roles = $user->roles->pluck('name');
+                    @endphp
                     <div class="card-tools">
-                        <a href="{{ route('admin.valoracion.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Valaracion</a>
+                        @if($roles->contains('DEPORTISTA'))
+                            <a href="{{ route('admin.index', ['from' => 'valoracion']) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Valoracion</a>
+                        @else
+                            @if(!$roles->contains('ADMINISTRADOR DE ESPACIOS'))
+                                <a href="{{ route('admin.valoracion.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Valoracion</a>
+                            @endif
+                        @endif
                     </div>
                 </div>
                 

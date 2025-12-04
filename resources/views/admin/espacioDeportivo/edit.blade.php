@@ -34,6 +34,11 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="row">
+                                    {{-- Administradores --}}
+                                    @php
+                                        $user = Auth::user();
+                                        $roles = $user->roles->pluck('name');
+                                    @endphp
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="administrador_espacio_id">Administrador del Espacio</label>
@@ -41,21 +46,27 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
                                                 </div>
-                                                <select name="administrador_espacio_id" id="administrador_espacio_id" class="form-control" required>
-                                                    <option value="">Seleccione un administrador</option>
-                                                    @foreach($administradores as $admin)
-                                                        <option value="{{ $admin->id }}" 
-                                                            {{ old('administrador_espacio_id', $espacioDeportivo->administrador_espacio_id) == $admin->id ? 'selected' : '' }}>
-                                                            {{ $admin->user->nombres }} {{ $admin->user->apellidos }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                                @if($user->roles->contains('ADMINISTRADOR'))
+                                                    <select name="administrador_espacio_id" id="administrador_espacio_id" class="form-control" required>
+                                                        <option value="">Seleccione un administrador</option>
+                                                        @foreach($administradores as $admin)
+                                                            <option value="{{ $admin->id }}" 
+                                                                {{ old('administrador_espacio_id', $espacioDeportivo->administrador_espacio_id) == $admin->id ? 'selected' : '' }}>
+                                                                {{ $admin->user->nombres }} {{ $admin->user->apellidos }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <input type="text" class="form-control" value="{{ $espacioDeportivo->administradorEspacio->user->nombres }} {{ $espacioDeportivo->administradorEspacio->user->apellidos }}" disabled>
+                                                    <input type="hidden" name="administrador_espacio_id" value="{{ $espacioDeportivo->administrador_espacio_id }}">
+                                                    @endif
                                             </div>
                                             @error('administrador_espacio_id')
                                                 <small style="color: red">{{ $message }}</small>
                                             @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="nombre">Nombre</label>

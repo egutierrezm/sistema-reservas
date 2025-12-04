@@ -98,8 +98,8 @@ class RegisterController extends Controller
                         'reserva_id' => $reserva->id,
                         'deportista_id' => $deportista->id
                     ]);
-                    $qrFileName = 'qrs/ingreso_reserva_'.$reserva->id.'_dep_'.$deportista->id.'.svg';
-                    $qr = QrCode::format('svg')->size(300)->generate($urlAcceso);
+                    $qrFileName = 'qrs/ingreso_reserva_'.$reserva->id.'_dep_'.$deportista->id.'.png';
+                    $qr = QrCode::format('png')->size(300)->generate($urlAcceso);
                     Storage::disk('public')->put($qrFileName, $qr);
                     $reserva->participantes()->attach($deportista->id, [
                         'ingreso' => false,

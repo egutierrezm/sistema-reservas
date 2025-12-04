@@ -87,7 +87,7 @@
     </div>
 </div>
 <div class="mb-3">
-    <a href="{{ url()->previous() }}" class="btn btn-primary">
+    <a href="{{ route('admin.index') }}" class="btn btn-primary">
         <i class="fas fa-arrow-left"></i> Ver espacios deportivos
     </a>
 </div>
@@ -126,11 +126,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="horaInicio">Hora Inicio:</label>
-                            <input type="time" name="horaInicio" id="horaInicio" class="form-control" required>
+                            <input type="time" name="horaInicio" id="horaInicio" class="form-control" required readonly>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="horaFin">Hora Fin:</label>
-                            <input type="time" name="horaFin" id="horaFin" class="form-control" required>
+                            <input type="time" name="horaFin" id="horaFin" class="form-control" required readonly>
                         </div>
                     </div>
                     <input type="hidden" name="deportista_id" value="{{ auth()->user()->deportista->id }}">

@@ -7,6 +7,7 @@ use App\Models\CanchaControlador;
 use App\Models\Controlador;
 use App\Models\EspacioDeportivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CanchaControladorController extends Controller
 {
@@ -14,10 +15,31 @@ class CanchaControladorController extends Controller
     // Mostrar todas las asignaciones
     public function index()
     {
-        $asignaciones = CanchaControlador::with([
-            'cancha',
-            'controlador.user'
-        ])->get();
+        $user = Auth::user();
+        $roles = $user->roles->pluck('name');
+        if ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
+            $espaciosIds = $user->administradorEspacio->espaciosDeportivos->pluck('id');
+            $asignaciones = CanchaControlador::with([
+                'cancha.espacioDeportivo',
+                'controlador.user'
+            ])
+            ->whereHas('cancha', function($query) use ($espaciosIds) {
+                $query->whereIn('espacio_deportivo_id', $espaciosIds);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+        }else{
+            $asignaciones = CanchaControlador::with([
+                'cancha.espacioDeportivo',
+                'controlador.user'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        }
+        // $asignaciones = CanchaControlador::with([
+        //     'cancha',
+        //     'controlador.user'
+        // ])->orderBy('created_at', 'desc')->get();
 
         return view('admin.asignacion.index', compact('asignaciones'));
     }
@@ -65,8 +87,19 @@ class CanchaControladorController extends Controller
     // Mostrar formulario para editar asignación
     public function edit(string $id)
     {
+        $user = Auth::user();
+        $roles = $user->roles->pluck('name');
+
         $asignacion = CanchaControlador::findOrFail($id);
-        $espacios = EspacioDeportivo::all();
+
+        // $espacios = EspacioDeportivo::all();
+        if ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
+            $espacios = $user->administradorEspacio->espaciosDeportivos;
+        } else {
+            $espacios = EspacioDeportivo::all();
+        }
+
+
         $espacioSeleccionadoId = $asignacion->cancha->espacio_deportivo_id;
         $canchas = Cancha::where('espacio_deportivo_id', $espacioSeleccionadoId)->get();
         $controladores = Controlador::with('user')->get();

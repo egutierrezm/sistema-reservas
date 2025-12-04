@@ -37,6 +37,26 @@
 @stop
 
 @section('content')
+
+@php
+    $roles = Auth::user()->roles->pluck('name');
+    $from = request()->get('from');
+@endphp
+
+@if($roles->contains('DEPORTISTA') && $from)
+    @if($from === 'reserva')
+        @php
+            session()->now('mensaje', 'Puedes hacer tus reservas desde aquí.');
+            session()->now('icono', 'info');
+        @endphp
+    @elseif($from === 'valoracion')
+        @php
+            session()->now('mensaje', 'Puedes hacer tus valoraciones desde aquí.');
+            session()->now('icono', 'info');
+        @endphp
+    @endif
+@endif
+
 <div class="container">
     <div class="row">
         @foreach($espacios as $espacio)
@@ -110,5 +130,18 @@
 @stop
 
 @section('js')
+@if(session('mensaje'))
+<script>
+    Swal.fire({
+        icon: "{{ session('icono') }}",
+        title: "{{ session('mensaje') }}",
+        toast: true,
+        position: 'top-end',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+    });
+</script>
+@endif
 
 @stop

@@ -20,9 +20,9 @@ class EspacioDeportivoController extends Controller
         if ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
             $espacioDeportivos = $user->administradorEspacio->espaciosDeportivos()
                                       ->with('administradorEspacio.user')
-                                      ->get();
+                                      ->orderBy('created_at', 'desc')->get();
         } else {
-            $espacioDeportivos = EspacioDeportivo::with('administradorEspacio.user')->get();
+            $espacioDeportivos = EspacioDeportivo::with('administradorEspacio.user')->orderBy('created_at', 'desc')->get();
         }
         return view('admin.espacioDeportivo.index', compact('espacioDeportivos'));
     }

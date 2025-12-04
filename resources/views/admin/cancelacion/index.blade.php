@@ -38,7 +38,7 @@
                                         <th>Fecha y hora de reserva</th>
                                         <th>Fecha cancelacion</th>
                                         <th>Motivo</th>
-                                        <th>Acciones</th>
+                                        {{-- <th>Acciones</th> --}}
                                     </thead>
                                     <tbody>
                                         @forelse($cancelaciones as $cancelacion)
@@ -46,11 +46,11 @@
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>
                                                 {{ $cancelacion->deportista->user->nombres }} {{ $cancelacion->deportista->user->apellidos }}<br>
-                                                <small class="text-muted">{{ $cancelacion->deportista->user->email }}</small>
+                                                <small class="text-light">{{ $cancelacion->deportista->user->email }}</small>
                                             </td>
                                             <td>
                                                 {{ $cancelacion->reserva->cancha->nombre }}<br>
-                                                <small class="text-muted">
+                                                <small class="text-light">
                                                     {{ $cancelacion->reserva->cancha->espacioDeportivo->nombre ?? '' }}
                                                 </small>
                                             </td>
@@ -69,13 +69,13 @@
                                                 </div>
                                             </td>
                                             {{-- Acciones --}}
-                                            <td class="align-middle">
+                                            {{-- <td class="align-middle">
                                                 <div class="d-flex justify-content-center align-items-center">
                                                     <a href="{{ route('admin.cancelacion.show', $cancelacion->reserva->id) }}" class="btn-icon-circle btn-view mr-1" title="Ver detalles">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                 </div>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         @empty
                                             <tr>

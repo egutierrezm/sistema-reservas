@@ -94,7 +94,7 @@
                                 {{ $saldo <= 0 ? 'disabled' : 'required' }}>
                                 <option value="">Seleccione una opción</option>
                                 {{-- <option value="Efectivo" {{ old('metodo') == 'Efectivo' ? 'selected' : '' }}>Efectivo</option> --}}
-                                <option value="Transferencia" {{ old('metodo') == 'Transferencia' ? 'selected' : '' }}>Transferencia</option>
+                                {{-- <option value="Transferencia" {{ old('metodo') == 'Transferencia' ? 'selected' : '' }}>Transferencia</option> --}}
                                 <option value="Tarjeta" {{ old('metodo') == 'Tarjeta' ? 'selected' : '' }}>Tarjeta</option>
                                 @if(!auth()->user()->getRoleNames()->contains('DEPORTISTA'))
                                     <option value="Efectivo" {{ old('metodo') == 'Efectivo' ? 'selected' : '' }}>Efectivo</option>

@@ -9,7 +9,7 @@ class DisciplinaDeportivaController extends Controller
 {
     public function index()
     {
-        $disciplinaDeportivas = DisciplinaDeportiva::all();
+        $disciplinaDeportivas = DisciplinaDeportiva::orderBy('created_at', 'desc')->get();
         // return response()->json($disciplinaDeportivas);
         return view('admin.disciplinaDeportiva.index', compact('disciplinaDeportivas'));
     }

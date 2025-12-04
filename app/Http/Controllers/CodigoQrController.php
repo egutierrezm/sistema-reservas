@@ -21,13 +21,13 @@ class CodigoQrController extends Controller
                 'reserva.participantes.user'
             ])->whereHas('reserva', function($query) use ($user) {
                 $query->where('deportista_id', $user->deportista->id);
-            })->get();
+            })->orderBy('created_at', 'desc')->get();
         } else {
             $codigos = CodigoQr::with([
                 'reserva.deportista.user',
                 'reserva.cancha',
                 'reserva.participantes.user'
-            ])->get();
+            ])->orderBy('created_at', 'desc')->get();
         }
         return view('admin.codigoQr.index', compact('codigos'));
     }
@@ -70,11 +70,11 @@ class CodigoQrController extends Controller
             return redirect()->back()->with('error', 'Archivo QR no encontrado.');
         }
 
-        $svg = Storage::disk('public')->get($codigo->qrimage);
+        $png = Storage::disk('public')->get($codigo->qrimage);
 
-        return response($svg)
-            ->header('Content-Type', 'image/svg+xml')
-            ->header('Content-Disposition', 'attachment; filename="QR_'.$codigo->reserva_id.'.svg"');
+        return response($png)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'attachment; filename="QR_Reserva_'.$codigo->reserva_id.'.png"');
     }
 
 }

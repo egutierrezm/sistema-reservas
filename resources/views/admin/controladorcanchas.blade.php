@@ -149,10 +149,10 @@
                                         </td>
                                         <td>
                                             @if(!$part->pivot->ingreso)
-                                            <form action="" method="POST">
+                                            <form action="{{ route('admin.controlAcceso', ['reserva_id' => $reserva->id, 'deportista_id' => $part->id]) }}" method="POST">
                                                 @csrf
-                                                <input type="hidden" name="reserva_id" value="{{ $reserva->id }}">
-                                                <input type="hidden" name="deportista_id" value="{{ $part->id }}">
+                                                {{-- <input type="hidden" name="reserva_id" value="{{ $reserva->id }}">
+                                                <input type="hidden" name="deportista_id" value="{{ $part->id }}"> --}}
                                                 <button type="submit" class="btn btn-sm btn-primary">
                                                     <i class="fas fa-check"></i> Marcar Ingreso
                                                 </button>

@@ -86,8 +86,8 @@ class ReservaController extends Controller
 
         // Generar codigo QR de la reserva
         $urlRegistro = route('qr.acceso', ['reserva' => $reserva->id]);
-        $qr = QrCode::format('svg')->size(250)->generate($urlRegistro);
-        $nombreArchivo = 'qrs/QR_' . $reserva->id . '_' . Str::random(6) . '.svg';
+        $qr = QrCode::format('png')->size(300)->generate($urlRegistro);
+        $nombreArchivo = 'qrs/QR_' . $reserva->id . '_' . Str::random(6) . '.png';
         Storage::disk('public')->put($nombreArchivo, $qr);
 
         $codigoqr = new CodigoQr();

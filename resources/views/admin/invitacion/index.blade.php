@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="text-white">Mis Invitaciones</h1>
+                <h1 class="m-0">Mis Invitaciones</h1>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
                     // Lógica de estado
                     $ingreso = $reserva->pivot->ingreso;
                     $borde = $ingreso ? 'border-secondary' : 'border-success';
-                    $textoEstado = $ingreso ? 'INGRESÓ' : 'INVITADO';
+                    $textoEstado = $ingreso ? 'FINALIZO' : 'INVITADO';
                     $bgRibbon = $ingreso ? 'bg-light' : 'bg-success';
                     
                     // Formato fechas
@@ -101,7 +101,7 @@
                                     @if($reserva->pivot->qr_image)
                                         <a href="{{ asset('storage/' . $reserva->pivot->qr_image) }}" 
                                            class="btn btn-success btn-block btn-sm" 
-                                           download="Invitacion-{{ $deportista->user->nombres }}.svg">
+                                           download="invitacion-{{ $deportista->user->nombres }}.png">
                                             <i class="fas fa-download"></i> Descargar
                                         </a>
                                     @endif

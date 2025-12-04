@@ -11,7 +11,7 @@ class ControladorController extends Controller
 
     public function index()
     {
-        $controladores = Controlador::with('user')->get();
+        $controladores = Controlador::with('user')->orderBy('id', 'desc')->get();
         return view('admin.controlador.index', compact('controladores'));
         // return response()->json($controladores);
     }

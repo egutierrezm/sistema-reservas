@@ -25,8 +25,14 @@
                     <h3 class="card-title"><b>Disciplinas Deportivas Registradas</b></h3>
 
                     <!-- /.card-tools -->
+                    @php
+                        $user = Auth::user();
+                        $roles = $user->roles->pluck('name');
+                    @endphp
                     <div class="card-tools">
-                        <a href="{{ route('admin.disciplinaDeportiva.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Disciplina Deportiva</a>
+                        @if($roles->contains('ADMINISTRADOR'))
+                            <a href="{{ route('admin.disciplinaDeportiva.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Disciplina Deportiva</a>
+                        @endif
                     </div>
                 </div>
                 
@@ -53,6 +59,8 @@
                                                     <a href="{{ route('admin.disciplinaDeportiva.show', $disciplinaDeportiva->id) }}" class="btn-icon-circle btn-view mr-1" title="Ver detalles">
                                                         <i class="fas fa-eye me-1"></i>
                                                     </a>
+
+                                                    @if($roles->contains('ADMINISTRADOR'))
                                                     <a href="{{ route('admin.disciplinaDeportiva.edit', $disciplinaDeportiva->id) }}" class="btn-icon-circle btn-edit mr-1" title="Editar disciplina">
                                                         <i class="fas fa-edit me-1"></i>
                                                     </a>
@@ -86,6 +94,7 @@
                                                             });
                                                         }
                                                     </script>
+                                                    @endif
                                                 @else
                                                     <form action="{{ route('admin.disciplinaDeportiva.restore', $disciplinaDeportiva->id) }}" method="POST"
                                                         id="miFormulario{{ $disciplinaDeportiva->id }}">

@@ -117,7 +117,7 @@
                                                 <span class="input-group-text"><i class="fas fa-clock"></i></span>
                                             </div>
                                             <input type="time" class="form-control" name="horaInicio" id="horaInicio"
-                                                value="{{ old('horaInicio') }}" required>
+                                                value="{{ old('horaInicio') }}" required readonly>
                                         </div>
                                         @error('horaInicio')
                                             <small style="color:red">{{ $message }}</small>
@@ -132,7 +132,7 @@
                                                 <span class="input-group-text"><i class="fas fa-clock"></i></span>
                                             </div>
                                             <input type="time" class="form-control" name="horaFin" id="horaFin"
-                                                value="{{ old('horaFin') }}" required>
+                                                value="{{ old('horaFin') }}" required readonly>
                                         </div>
                                         @error('horaFin')
                                             <small style="color:red">{{ $message }}</small>

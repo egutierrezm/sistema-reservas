@@ -19,6 +19,7 @@ class AdminController extends Controller
     public function index(Request $request){
         $user = Auth::user();
         $roles = $user->roles->pluck('name');
+        
         if($roles->contains('ADMINISTRADOR')){
             $totalRoles = Role::count();
             $totalUsers = User::whereDoesntHave('roles', function ($query) {

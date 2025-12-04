@@ -22,7 +22,7 @@ class UserController extends Controller
     {
         $usuarios = User::whereDoesntHave('roles', function ($query) {
             $query->where('name', 'ADMINISTRADOR');
-        })->withTrashed()->get();
+        })->withTrashed()->orderBy('created_at', 'desc')->get();
         // return response()->json($usuarios);
         return view('admin.user.index', compact('usuarios'));
     }

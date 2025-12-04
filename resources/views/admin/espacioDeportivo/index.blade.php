@@ -25,8 +25,15 @@
                     <h3 class="card-title"><b>Espacios Deportivos Registrados</b></h3>
 
                     <!-- /.card-tools -->
+                    @php
+                        $user = Auth::user();
+                        $roles = $user->roles->pluck('name');
+                    @endphp
+
                     <div class="card-tools">
-                        <a href="{{ route('admin.espacioDeportivo.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Espacio Deportivo</a>
+                        @if($roles->contains('ADMINISTRADOR'))
+                            <a href="{{ route('admin.espacioDeportivo.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Espacio Deportivo</a>
+                        @endif
                     </div>
                 </div>
                 
@@ -64,6 +71,7 @@
                                                     <a href="{{ route('admin.espacioDeportivo.edit', $espacioDeportivo->id) }}" class="btn-icon-circle btn-edit mr-1" title="Editar espacio">
                                                         <i class="fas fa-edit me-1"></i>
                                                     </a>
+                                                    @if($roles->contains('ADMINISTRADOR'))
                                                     <form action="{{ route('admin.espacioDeportivo.destroy', $espacioDeportivo->id) }}" method="POST"
                                                         id="miFormulario{{ $espacioDeportivo->id }}">
                                                         @csrf
@@ -94,6 +102,7 @@
                                                             });
                                                         }
                                                     </script>
+                                                    @endif
                                                 @else
                                                     <form action="{{ route('admin.espacioDeportivo.restore', $espacioDeportivo->id) }}" method="POST"
                                                         id="miFormulario{{ $espacioDeportivo->id }}">

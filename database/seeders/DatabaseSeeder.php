@@ -203,8 +203,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('J123456A'),
             'tipoDocumento' => 'CI',
             'nroDocumento' => '11122233',
-            'nombres' => 'Reynaldo',
-            'apellidos' => 'Zeballos Torrez',
+            'nombres' => 'Josamed',
+            'apellidos' => 'Rojas Andrade',
             'fechaNaci' => '1995-04-13',
             'celular' => '66677788',
             'genero' => 'Masculino',
@@ -226,7 +226,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Espacio Deportivo Luis Lastra',
             'direccion' => 'Final Calle Presbítero Medina, Sopocachi, La Paz, Bolivia',
             'descripcion' => 'Disfruta de varias canchas en un espacio cómodo y seguro para tus reservas',
-            'horaApertura' => '14:30:00',
+            'horaApertura' => '08:00:00',
             'horaCierre' => '20:00:00',
             'imgespacio' => 'espacios/psMPLbh43sdPfSo5QVhR0qtZNLCKDfeFCr4AKLYU.jpg',
             'administrador_espacio_id' => $useradmin2->administradorEspacio->id
@@ -235,7 +235,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Espacio Deportivo The Strongest',
             'direccion' => 'Calle 34, Zona Achumani, La Paz, Bolivia',
             'descripcion' => 'Centro deportivo con varias canchas para entrenar y organizar tus reservas',
-            'horaApertura' => '09:30:00',
+            'horaApertura' => '08:00:00',
             'horaCierre' => '20:00:00',
             'imgespacio' => 'espacios/pyOhth8FBHCpNKggMsQmP7XIbg6UGTi3qrHjKYA5.jpg',
             'administrador_espacio_id' => $useradmin3->administradorEspacio->id
@@ -365,7 +365,7 @@ class DatabaseSeeder extends Seeder
 
         //Seed para Deportista + Reserva + (Cancha + Disciplina Deportiva)
         Reserva::create([
-            'fechaReserva' => '2025-11-27',
+            'fechaReserva' => '2025-12-02',
             'horaInicio' => '10:00:00',
             'horaFin' => '11:00:00',
             'estado' => 'Pendiente',
@@ -375,7 +375,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Reserva::create([
-            'fechaReserva' => '2025-11-27',
+            'fechaReserva' => '2025-12-02',
             'horaInicio' => '17:00:00',
             'horaFin' => '18:00:00',
             'estado' => 'Pendiente',

@@ -22,16 +22,25 @@ class CanchaController extends Controller
             $espaciosIds = $user->administradorEspacio->espaciosDeportivos->pluck('id');
             $canchas = Cancha::with(['espacioDeportivo', 'disciplinaDeportivas'])
                              ->whereIn('espacio_deportivo_id', $espaciosIds)
+                             ->orderBy('created_at', 'desc')
                              ->get();
         } else {
-            $canchas = Cancha::with(['espacioDeportivo', 'disciplinaDeportivas'])->get();
+            $canchas = Cancha::with(['espacioDeportivo', 'disciplinaDeportivas'])->orderBy('created_at', 'desc')->get();
         }
         return view('admin.cancha.index', compact('canchas'));
     }
 
     public function create()
     {
-        $espacioDeportivos = EspacioDeportivo::all();
+        // $espacioDeportivos = EspacioDeportivo::all();
+        $user = Auth::user();
+        $roles = $user->roles->pluck('name');
+        if ($roles->contains('ADMINISTRADOR DE ESPACIOS')) {
+            $espacioDeportivos = $user->administradorEspacio->espaciosDeportivos;
+        } else {
+            $espacioDeportivos = EspacioDeportivo::all();
+        }
+
         $disciplinaDeportivas = DisciplinaDeportiva::all();
         return view('admin.cancha.create',compact('espacioDeportivos', 'disciplinaDeportivas'));
     }

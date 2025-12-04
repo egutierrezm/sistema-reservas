@@ -128,7 +128,7 @@
                                                 <span class="input-group-text"><i class="fas fa-clock"></i></span>
                                             </div>
                                             <input type="time" class="form-control" name="horaInicio" id="horaInicio"
-                                                value="{{ old('horaInicio', $reserva->horaInicio) }}" required>
+                                                value="{{ old('horaInicio', \Carbon\Carbon::parse($reserva->horaInicio)->format('H:i')) }}" required readonly>
                                         </div>
                                         @error('horaInicio')
                                             <small style="color:red">{{ $message }}</small>
@@ -143,7 +143,7 @@
                                                 <span class="input-group-text"><i class="fas fa-clock"></i></span>
                                             </div>
                                             <input type="time" class="form-control" name="horaFin" id="horaFin"
-                                                value="{{ old('horaFin', $reserva->horaFin) }}" required>
+                                                value="{{ old('horaFin', \Carbon\Carbon::parse($reserva->horaFin)->format('H:i')) }}" required readonly>
                                         </div>
                                         @error('horaFin')
                                             <small style="color:red">{{ $message }}</small>

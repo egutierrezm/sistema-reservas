@@ -25,8 +25,19 @@
                     <h3 class="card-title"><b>Reservas Registradas</b></h3>
 
                     <!-- /.card-tools -->
+                    @php
+                        $user = Auth::user();
+                        $roles = $user->roles->pluck('name');
+                    @endphp
+                    
                     <div class="card-tools">
-                        <a href="{{ route('admin.reserva.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Reserva</a>
+                    @if($roles->contains('DEPORTISTA'))
+                        <a href="{{ route('admin.index', ['from' => 'reserva']) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Reserva</a>
+                    @else
+                        @if(!$roles->contains('ADMINISTRADOR DE ESPACIOS'))
+                            <a href="{{ route('admin.reserva.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Reserva</a>
+                        @endif
+                    @endif
                     </div>
                 </div>
                 
@@ -44,7 +55,9 @@
                                         <th>Fecha y hora</th>
                                         <th>Precio</th>
                                         <th>Estado</th>
-                                        <th>Acciones</th>
+                                        @if(!$roles->contains('ADMINISTRADOR DE ESPACIOS'))
+                                            <th>Acciones</th>
+                                        @endif
                                     </thead>
                                     <tbody>
                                         @foreach($reservas as $reserva)
@@ -85,15 +98,19 @@
                                                     <span class="badge badge-light">{{ $reserva->estado }}</span>
                                                 @endif
                                             </td>
+
+                                            @if(!$roles->contains('ADMINISTRADOR DE ESPACIOS'))
                                             <td class="align-middle">
                                                 @if(!$reserva->deleted_at)
                                                 <div class="d-flex justify-content-center align-items-center">
                                                     <a href="{{ route('admin.reserva.show', $reserva->id) }}" class="btn-icon-circle btn-view mr-1" title="Ver detalles">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
+
                                                     <a href="{{ route('admin.reserva.edit', $reserva->id) }}" class="btn-icon-circle btn-edit mr-1" title="Editar reserva">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
+                                                    
                                                     <a href="{{ route('admin.pago.create', $reserva->id) }}" class="btn-icon-circle btn-pay mr-1" title="Registrar pago">
                                                         <i class="fas fa-credit-card"></i>
                                                     </a>
@@ -156,6 +173,7 @@
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                     </form>
+                                                    
                                                 </div>
                                                     <script>
                                                         function preguntar{{ $reserva->id }}(event) {
@@ -211,6 +229,7 @@
                                                 
                                                 @endif
                                             </td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>

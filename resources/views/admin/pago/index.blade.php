@@ -38,7 +38,7 @@
                                         <th>Fecha de pago</th>
                                         <th>Monto (Bs)</th>
                                         <th>Metodo</th>
-                                        <th>Acciones</th>
+                                        {{-- <th>Acciones</th> --}}
                                     </thead>
                                     <tbody>
                                         @foreach($pagos as $pago)
@@ -49,7 +49,7 @@
                                             <td>{{ \Carbon\Carbon::parse($pago->fechaPago)->format('d/m/Y') }}</td>
                                             <td>{{ $pago->monto }}</td>
                                             <td>{{ $pago->metodo }}</td>
-                                            <td class="align-middle">
+                                            {{-- <td class="align-middle">
                                                 <div class="d-flex justify-content-center align-items-center">
                                                     <a href="{{ route('admin.pago.edit', $pago->id) }}" class="btn-icon-circle btn-edit mr-1" title="Editar reserva">
                                                         <i class="fas fa-edit"></i>
@@ -85,7 +85,7 @@
                                                         });
                                                     }
                                                 </script>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         @endforeach
                                     </tbody>
