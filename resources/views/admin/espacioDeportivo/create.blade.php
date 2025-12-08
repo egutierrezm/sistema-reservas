@@ -28,7 +28,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <form action="{{ route('admin.espacioDeportivo.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="formReserva" action="{{ route('admin.espacioDeportivo.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-9">
@@ -209,4 +209,25 @@
 
 @section('js')
     <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+
+
+{{-- Inhabilitar boton de guardado --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('formReserva');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    let enviado = false;
+
+    form.addEventListener('submit', function (e) {
+        if (enviado) {
+            e.preventDefault();
+            return false;
+        }
+        enviado = true;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+    });
+});
+</script>
 @stop
